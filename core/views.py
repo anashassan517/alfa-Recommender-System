@@ -1,41 +1,4 @@
-# from django.shortcuts import render
-# from products.models import Category, Product
-# from recommendations.gorse_client import GorseClient
 
-# def home(request):
-#     categories = Category.objects.all()
-    
-#     # Get popular products using gorse.io
-#     gorse_client = GorseClient()
-#     popular_item_ids = gorse_client.get_popular_items(n=8)
-    
-#     # Get recommended products if user is authenticated
-#     recommended_products = []
-#     if request.user.is_authenticated:
-#         recommended_item_ids = gorse_client.get_recommend_items(request.user.id, n=8)
-#         recommended_products = Product.objects.filter(gorse_item_id__in=recommended_item_ids)
-    
-#     # Get popular products from the database using item_ids from gorse
-#     popular_products = Product.objects.filter(gorse_item_id__in=popular_item_ids)
-    
-#     # Featured products (just get some products if gorse doesn't return enough)
-#     if len(popular_products) < 4:
-#         featured_products = Product.objects.filter(available=True)[:8]
-#     else:
-#         featured_products = popular_products
-    
-#     context = {
-#         'categories': categories,
-#         'featured_products': featured_products,
-#         'recommended_products': recommended_products
-#     }
-#     return render(request, 'core/home.html', context)
-
-# def about(request):
-#     return render(request, 'core/about.html')
-
-# def contact(request):
-#     return render(request, 'core/contact.html')
 from django.shortcuts import render
 from products.models import Category, Product
 from recommendations.gorse_client import GorseClient

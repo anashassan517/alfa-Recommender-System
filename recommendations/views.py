@@ -196,13 +196,30 @@ def explore_recommendations(request):
     }
     return render(request, 'recommendations/explore.html', context)
 
+# Dashboard item neighbors
+def get_dashboard_item_neighbors(self, item_id, n=10, offset=0):
+        """Get dashboard neighbors data for an item"""
+        endpoint = f"/api/item/{item_id}/neighbors"
+        
+        url = f"{self.base_url}{endpoint}"
+        params = {'n': n, 'offset': offset}
+        
+        try:
+            response = requests.get(url, headers=self.headers, params=params)
+            response.raise_for_status()
+            return self._log_response(endpoint, response.json(), params)
+        except Exception as e:
+            logger.error(f"Error getting dashboard item neighbors: {e}")
+            print(f"Error getting dashboard item neighbors: {e}")
+            return []    
+
 def dashboard_item_neighbors(request, product_id):
     """Get detailed dashboard information about item neighbors"""
     gorse_client = GorseClient()
     product = get_object_or_404(Product, id=product_id)
     
     # Get dashboard item neighbors data
-    neighbors_data = gorse_client.get_dashboard_item_neighbors(product.gorse_item_id, n=20)
+    neighbors_data=gorse_client.get_item_neighbors(product.gorse_item_id, n=20)
     
     # Get the actual products
     item_ids = [item.get('id', '') for item in neighbors_data if 'id' in item]

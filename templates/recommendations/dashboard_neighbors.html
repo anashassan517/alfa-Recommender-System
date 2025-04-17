@@ -93,16 +93,16 @@
                                         <div>
                                             <strong>{{ item.product.name|truncatechars:50 }}</strong>
                                             <br>
-                                            <small class="text-muted">ID: {{ item.Id }}</small>
+                                            <small class="text-muted">ID: {{ item.id }}</small>
                                         </div>
                                     </div>
                                     {% else %}
-                                    <span>{{ item.Id }}</span>
+                                    <span>{{ item.id }}</span>
                                     <br>
                                     <small class="text-muted">(Product not found in database)</small>
                                     {% endif %}
                                 </td>
-                                <td>{{ item.Score|floatformat:6 }}</td>
+                                <td>{{ item.score|floatformat:6 }}</td>
                                 <td>
                                     {% if 'product' in item %}
                                     {{ item.product.category.name }}

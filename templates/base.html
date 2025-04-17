@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,58 +16,58 @@
             --text-light: #ffffff;
             --text-dark: #333333;
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
         }
-        
+
         .bg-alfa-primary {
             background-color: var(--primary-color);
         }
-        
+
         .bg-alfa-secondary {
             background-color: var(--secondary-color);
         }
-        
+
         .text-alfa {
             color: var(--primary-color);
         }
-        
+
         .btn-alfa {
             background-color: var(--primary-color);
             color: var(--text-light);
             border: none;
         }
-        
+
         .btn-alfa:hover {
             background-color: var(--accent-color);
             color: var(--text-light);
         }
-        
+
         .nav-link {
             color: var(--text-light) !important;
         }
-        
+
         .nav-link:hover {
             color: rgba(255, 255, 255, 0.8) !important;
         }
-        
+
         .product-card {
             transition: transform 0.3s;
             height: 100%;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
-        
+
         .card-img-top {
             height: 200px;
             object-fit: contain;
             padding: 10px;
         }
-        
+
         .product-title {
             height: 48px;
             overflow: hidden;
@@ -74,7 +75,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
-        
+
         footer {
             background-color: var(--primary-color);
             color: var(--text-light);
@@ -83,6 +84,7 @@
     </style>
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-alfa-primary sticky-top">
@@ -95,8 +97,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:home' %}">Home</a>
+                    
+                    
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -104,7 +106,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             {% for category in categories %}
-                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </li>
                             {% endfor %}
                             <li><a class="dropdown-item" href="{% url 'products:product_list' %}">All Products</a></li>
                         </ul>
@@ -115,25 +118,45 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle bold" href="#" role="button" data-bs-toggle="dropdown">
+                            Recommendations
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'recommendations:explore' %}">Explore All</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:user_recommendations' %}">For
+                                    You</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}">Popular
+                                    Items</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}">Latest
+                                    Items</a></li>
+                        </ul>
                 </ul>
                 <div class="d-flex align-items-center">
                     <form class="d-flex me-2" action="{% url 'products:product_list' %}" method="get">
-                        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search"
+                            aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Search</button>
                     </form>
                     <div class="dropdown me-2">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
+                            data-bs-toggle="dropdown">
                             <i class="bi bi-person"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             {% if request.user.is_authenticated %}
-                                <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'users:orders' %}">My Orders</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:orders' %}">My Orders</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
                             {% else %}
-                                <li><a class="dropdown-item" href="{% url 'users:login' %}">Login</a></li>
-                                <li><a class="dropdown-item" href="{% url 'users:register' %}">Register</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:login' %}">Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:register' %}">Register</a></li>
                             {% endif %}
                         </ul>
                     </div>
@@ -145,7 +168,7 @@
                     </a>
                 </div>
                 <!-- Add this to your navbar in base.html -->
-    <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Recommendations
         </a>
@@ -156,7 +179,7 @@
             <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}">Popular Items</a></li>
             <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}">Latest Items</a></li>
         </ul>
-    </li>
+    </li> -->
             </div>
         </div>
     </nav>
@@ -184,7 +207,8 @@
                             <a href="{% url 'core:home' %}" class="text-light text-decoration-none">Home</a>
                         </li>
                         <li class="mb-2">
-                            <a href="{% url 'products:product_list' %}" class="text-light text-decoration-none">Products</a>
+                            <a href="{% url 'products:product_list' %}"
+                                class="text-light text-decoration-none">Products</a>
                         </li>
                         <li class="mb-2">
                             <a href="{% url 'core:about' %}" class="text-light text-decoration-none">About Us</a>
@@ -233,4 +257,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>
