@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Alfa Mall - Your Shopping Destination{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<section class="bg-alfa-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold mb-4">Welcome to Alfa Mall</h1>
+                <p class="lead mb-4">Discover the best deals on electronics, fashion, mobiles, bikes, and accessories.</p>
+                <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg px-4">Shop Now</a>
+            </div>
+            <div class="col-md-6">
+                <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/budgeted-phones-50k.jpg" alt="Shopping at Alfa Mall" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products|slice:":4" %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 product-card">
+                    <a href="{{ product.get_absolute_url }}">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/vivov50.7f217e1f.png" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title product-title">{{ product.name }}</h5>
+                        <p class="card-text text-danger">
+                            <s>PKR: {{ product.original_price }}</s>
+                        </p>
+                        <p class="card-text text-danger fw-bold">
+                            Discounted Price: {{ product.price }}
+                        </p>
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-alfa">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No featured products available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Shop by Category</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <a href="{{ category.get_absolute_url }}" class="btn btn-alfa">Browse</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No categories available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Personalized Recommendations via AJAX -->
+{% if user.is_authenticated %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Recommended For You</h2>
+            <a href="{% url 'recommendations:user_recommendations' %}" class="btn btn-outline-danger">
+                See all recommendations <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div id="personalizedRecommendations" class="row">
+            <div class="col-12 text-center py-4">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Special Offer -->
+<section class="py-5 bg-alfa-secondary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Special Offer</h2>
+        <p class="lead mb-4">Sign up today and get 20% off your first purchase!</p>
+        <a href="{% url 'users:register' %}" class="btn btn-light btn-lg">Sign Up Now</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{% if user.is_authenticated %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('personalizedRecommendations');
+
+        fetch('/recommendations/api/get-recommendations/?type=recommended')
+            .then(response => response.json())
+            .then(data => {
+                if (data.products && data.products.length > 0) {
+                    let html = '';
+                    data.products.forEach(product => {
+                        html += `
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <div class="card h-100 product-card">
+                                    <a href="${product.url}">
+                                        <img src="${product.image_url || 'https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg'}"
+                                            class="card-img-top" alt="${product.name}">
+                                    </a>
+                                    <div class="card-body">
+                                        <h5 class="card-title product-title">${product.name}</h5>
+                                        <p class="card-text text-danger fw-bold">PKR ${product.price}</p>
+                                        <a href="${product.url}" class="btn btn-sm btn-alfa">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-4">
+                            <div class="alert alert-info">
+                                We're still learning your preferences! Browse more products to get personalized recommendations.
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching recommendations:', error);
+                container.innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <div class="alert alert-danger">
+                            Error loading recommendations. Please try again.
+                        </div>
+                    </div>
+                `;
+            });
+    });
+</script>
+{% endif %}
+{% endblock %}

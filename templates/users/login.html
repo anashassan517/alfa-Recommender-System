@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Login</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-alfa">Log In</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <p class="mb-0">Don't have an account? <a href="{% url 'users:register' %}" class="text-alfa">Register now</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

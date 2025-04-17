@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Similarity Analysis for {{ source_product.name }} | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-alfa">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'recommendations:explore' %}" class="text-alfa">Recommendations</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'recommendations:similar_items' source_product.id %}" class="text-alfa">
+                        Similar to {{ source_product.name|truncatechars:30 }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">Similarity Analysis</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h2 class="mb-4">Similarity Analysis</h2>
+    
+    <!-- Source product -->
+    <div class="card mb-4">
+        <div class="card-header bg-alfa-primary text-white">
+            <h4 class="mb-0">Source Product</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    {% if source_product.image %}
+                    <img src="{{ source_product.image.url }}" class="img-fluid" alt="{{ source_product.name }}">
+                    {% else %}
+                    <!-- <img src="https://via.placeholder.com/150" class="img-fluid" alt="{{ source_product.name }}"> -->
+                    <img src="${source_product.image_url || 'https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg'}" class="img-fluid" alt="{{ source_product.name }}">
+
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <h5>{{ source_product.name }}</h5>
+                    <p><strong>Category:</strong> {{ source_product.category.name }}</p>
+                    <p><strong>Price:</strong> <span class="text-danger">${{ source_product.price }}</span></p>
+                    <p><strong>Gorse Item ID:</strong> {{ source_product.gorse_item_id }}</p>
+                    <a href="{{ source_product.get_absolute_url }}" class="btn btn-alfa">View Product</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Debug info -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Debug Information</h5>
+        </div>
+        <div class="card-body bg-light">
+            <p><strong>Total Similar Items:</strong> {{ neighbors_data|length }}</p>
+            <p><strong>Timestamp:</strong> {% now "Y-m-d H:i:s" %}</p>
+            <p><strong>User:</strong> {{ request.user.username|default:"Anonymous" }}</p>
+        </div>
+    </div>
+    
+    <!-- Similar items with detailed scores -->
+    <div class="card">
+        <div class="card-header bg-alfa-primary text-white">
+            <h4 class="mb-0">Similar Items with Detailed Similarity Scores</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Score</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in neighbors_data %}
+                            <tr>
+                                <td>
+                                    {% if 'product' in item %}
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 50px; margin-right: 10px;">
+                                            {% if item.product.image %}
+                                            <img src="{{ item.product.image.url }}" class="img-fluid" alt="{{ item.product.name }}">
+                                            {% else %}
+                                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="img-fluid" alt="Product">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <strong>{{ item.product.name|truncatechars:50 }}</strong>
+                                            <br>
+                                            <small class="text-muted">ID: {{ item.Id }}</small>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <span>{{ item.Id }}</span>
+                                    <br>
+                                    <small class="text-muted">(Product not found in database)</small>
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.Score|floatformat:6 }}</td>
+                                <td>
+                                    {% if 'product' in item %}
+                                    {{ item.product.category.name }}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if 'product' in item %}
+                                    <span class="text-danger">${{ item.product.price }}</span>
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if 'product' in item %}
+                                    <a href="{{ item.product.get_absolute_url }}" class="btn btn-sm btn-alfa">View</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No similarity data available</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

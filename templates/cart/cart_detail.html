@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Shopping Cart | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Your Shopping Cart</h2>
+    
+    {% if cart|length > 0 %}
+    <div class="table-responsive mb-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                {% with product=item.product %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail me-3" style="width: 80px;">
+                            {% else %}
+                            <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/budgeted-phones-50k.jpg" alt="{{ product.name }}" class="img-thumbnail me-3" style="width: 80px;">
+                            {% endif %}
+                            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                        </div>
+                    </td>
+                    <td>${{ item.price }}</td>
+                    <td>
+                        <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <div style="width: 80px;">
+                                {{ item.update_quantity_form.quantity }}
+                            </div>
+                            {{ item.update_quantity_form.override }}
+                            <button type="submit" class="btn btn-sm btn-alfa ms-2">Update</button>
+                        </form>
+                    </td>
+                    <td>${{ item.total_price }}</td>
+                    <td>
+                        <a href="{% url 'cart:cart_remove' product.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="fw-bold">
+                    <td colspan="3" class="text-end">Total:</td>
+                    <td>${{ cart.get_total_price }}</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Continue Shopping
+            </a>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'users:checkout' %}" class="btn btn-alfa btn-lg">
+                Proceed to Checkout <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    {% else %}
+    <div class="card p-5 text-center">
+        <div class="mb-4">
+            <i class="bi bi-cart-x" style="font-size: 4rem; color: var(--primary-color);"></i>
+        </div>
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added any products to your cart yet.</p>
+        <div class="mt-4">
+            <a href="{% url 'products:product_list' %}" class="btn btn-alfa btn-lg">Start Shopping</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

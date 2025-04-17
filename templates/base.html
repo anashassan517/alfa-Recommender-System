@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Alfa Mall{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #e60000;
+            --secondary-color: #ff3333;
+            --accent-color: #990000;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .bg-alfa-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .bg-alfa-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .text-alfa {
+            color: var(--primary-color);
+        }
+        
+        .btn-alfa {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+        }
+        
+        .btn-alfa:hover {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+        }
+        
+        .nav-link {
+            color: var(--text-light) !important;
+        }
+        
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .product-card {
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: contain;
+            padding: 10px;
+        }
+        
+        .product-title {
+            height: 48px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 30px 0;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-alfa-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:home' %}">
+                <strong>ALFA MALL</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for category in categories %}
+                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}">All Products</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <form class="d-flex me-2" action="{% url 'products:product_list' %}" method="get">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">Search</button>
+                    </form>
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="bi bi-person"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            {% if request.user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:orders' %}">My Orders</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'users:login' %}">Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:register' %}">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative">
+                        <i class="bi bi-cart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ cart|length }}
+                        </span>
+                    </a>
+                </div>
+                <!-- Add this to your navbar in base.html -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Recommendations
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'recommendations:explore' %}">Explore All</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'recommendations:user_recommendations' %}">For You</a></li>
+            <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}">Popular Items</a></li>
+            <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}">Latest Items</a></li>
+        </ul>
+    </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-5">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-alfa-primary text-light">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Alfa Mall</h5>
+                    <p class="small">
+                        Your one-stop shop for electronics, fashion, and more.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Quick Links</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="{% url 'core:home' %}" class="text-light text-decoration-none">Home</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'products:product_list' %}" class="text-light text-decoration-none">Products</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'core:about' %}" class="text-light text-decoration-none">About Us</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'core:contact' %}" class="text-light text-decoration-none">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Categories</h5>
+                    <ul class="list-unstyled mb-0">
+                        {% for category in categories %}
+                        <li class="mb-2">
+                            <a href="{{ category.get_absolute_url }}" class="text-light text-decoration-none">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Contact Us</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-geo-alt"></i> 123 Main Street, City, Country
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-envelope"></i> info@alfamall.com
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-phone"></i> +1 234 567 890
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: var(--accent-color);">
+            © 2025 Alfa Mall. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

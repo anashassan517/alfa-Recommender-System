@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recommendation_type }} | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar with category filters -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Recommendation Types</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item {% if recommendation_type == 'For You' %}active bg-alfa-primary{% endif %}">
+                            <a class="text-decoration-none {% if recommendation_type == 'For You' %}text-white{% else %}text-dark{% endif %}" 
+                               href="{% url 'recommendations:user_recommendations' %}{% if selected_category %}?category={{ selected_category.slug }}{% endif %}">
+                               For You
+                            </a>
+                        </li>
+                        <li class="list-group-item {% if recommendation_type == 'Latest Items' %}active bg-alfa-primary{% endif %}">
+                            <a class="text-decoration-none {% if recommendation_type == 'Latest Items' %}text-white{% else %}text-dark{% endif %}" 
+                               href="{% url 'recommendations:latest_items' %}{% if selected_category %}?category={{ selected_category.slug }}{% endif %}">
+                               Latest Items
+                            </a>
+                        </li>
+                        <li class="list-group-item {% if recommendation_type == 'Popular Items' %}active bg-alfa-primary{% endif %}">
+                            <a class="text-decoration-none {% if recommendation_type == 'Popular Items' %}text-white{% else %}text-dark{% endif %}" 
+                               href="{% url 'recommendations:popular_items' %}{% if selected_category %}?category={{ selected_category.slug }}{% endif %}">
+                               Popular Items
+                            </a>
+                        </li>
+                        {% if source_product %}
+                        <li class="list-group-item active bg-alfa-primary">
+                            <a class="text-decoration-none text-white" href="#">
+                               Similar Items
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Categories</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item {% if not selected_category %}active bg-alfa-primary{% endif %}">
+                            {% if recommendation_type == 'For You' %}
+                                <a class="text-decoration-none {% if not selected_category %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:user_recommendations' %}">All Categories</a>
+                            {% elif recommendation_type == 'Latest Items' %}
+                                <a class="text-decoration-none {% if not selected_category %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:latest_items' %}">All Categories</a>
+                            {% elif recommendation_type == 'Popular Items' %}
+                                <a class="text-decoration-none {% if not selected_category %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:popular_items' %}">All Categories</a>
+                            {% elif source_product %}
+                                <a class="text-decoration-none {% if not selected_category %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:similar_items' source_product.id %}">All Categories</a>
+                            {% endif %}
+                        </li>
+                        
+                        {% for category in categories %}
+                        <li class="list-group-item {% if selected_category.id == category.id %}active bg-alfa-primary{% endif %}">
+                            {% if recommendation_type == 'For You' %}
+                                <a class="text-decoration-none {% if selected_category.id == category.id %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:user_recommendations' %}?category={{ category.slug }}">{{ category.name }}</a>
+                            {% elif recommendation_type == 'Latest Items' %}
+                                <a class="text-decoration-none {% if selected_category.id == category.id %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:latest_items' %}?category={{ category.slug }}">{{ category.name }}</a>
+                            {% elif recommendation_type == 'Popular Items' %}
+                                <a class="text-decoration-none {% if selected_category.id == category.id %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:popular_items' %}?category={{ category.slug }}">{{ category.name }}</a>
+                            {% elif source_product %}
+                                <a class="text-decoration-none {% if selected_category.id == category.id %}text-white{% else %}text-dark{% endif %}" 
+                                   href="{% url 'recommendations:similar_items' source_product.id %}?category={{ category.slug }}">{{ category.name }}</a>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main content with recommendations -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>{{ recommendation_type }}</h2>
+                
+                <!-- Debug info button -->
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#debugInfo">
+                        <i class="bi bi-bug"></i> Debug Info
+                    </button>
+                </div>
+            </div>
+            
+            {% if source_product %}
+            <!-- Display source product for similar items -->
+            <div class="card mb-4">
+                <div class="card-header bg-alfa-primary text-white">
+                    Source Product
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {% if source_product.image %}
+                            <img src="{{ source_product.image.url }}" class="img-fluid" alt="{{ source_product.name }}">
+                            {% else %}
+                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="img-fluid" alt="{{ source_product.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <h5>{{ source_product.name }}</h5>
+                            <p class="text-danger">${{ source_product.price }}</p>
+                            <a href="{{ source_product.get_absolute_url }}" class="btn btn-sm btn-alfa">View Details</a>
+                            <a href="{% url 'recommendations:dashboard_neighbors' source_product.id %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-graph-up"></i> View Detailed Similarities
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Debug info -->
+            <div class="collapse mb-4" id="debugInfo">
+                <div class="card card-body bg-light">
+                    <h5>Debug Information</h5>
+                    <p><strong>Recommendation Type:</strong> {{ recommendation_type }}</p>
+                    <p><strong>Selected Category:</strong> {{ selected_category.name|default:"All Categories" }}</p>
+                    <p><strong>Total Recommended Items:</strong> {{ recommended_products|length }}</p>
+                    <p><strong>Time:</strong> {% now "Y-m-d H:i:s" %}</p>
+                    <p><strong>User:</strong> {{ request.user.username|default:"Anonymous" }}</p>
+                    
+                    {% if source_product %}
+                    <p><strong>Source Product ID:</strong> {{ source_product.id }} (Gorse ID: {{ source_product.gorse_item_id }})</p>
+                    {% endif %}
+                    
+                    <p>For more detailed API responses, check the console logs.</p>
+                </div>
+            </div>
+            
+            <!-- Display recommendations -->
+            <div class="row">
+                {% for product in recommended_products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 product-card">
+                        <a href="{{ product.get_absolute_url }}">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title product-title">{{ product.name }}</h5>
+                            <p class="card-text text-danger fw-bold">${{ product.price }}</p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-alfa">View Details</a>
+                                <a href="{% url 'recommendations:similar_items' product.id %}" class="btn btn-sm btn-outline-secondary">
+                                    Similar Items
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="alert alert-info">
+                        <h4>No recommendations available</h4>
+                        <p>We couldn't find any {{ recommendation_type|lower }} at the moment. Try a different category or recommendation type.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

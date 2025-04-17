@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Create an Account</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">Password</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">Confirm Password</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-alfa">Register</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <p class="mb-0">Already have an account? <a href="{% url 'users:login' %}" class="text-alfa">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

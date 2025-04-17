@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if category %}{{ category.name }}{% else %}All Products{% endif %} | Alfa Mall
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Categories</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item {% if not category %}active bg-alfa-primary{% endif %}">
+                            <a class="text-decoration-none {% if not category %}text-white{% else %}text-dark{% endif %}"
+                                href="{% url 'products:product_list' %}">All</a>
+                        </li>
+                        {% for c in categories %}
+                        <li class="list-group-item {% if category.id == c.id %}active bg-alfa-primary{% endif %}">
+                            <a class="text-decoration-none {% if category.id == c.id %}text-white{% else %}text-dark{% endif %}"
+                                href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product List -->
+        <div class="col-md-9">
+            <h2>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+            <hr>
+
+            <!-- Filter and Sort Controls -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span>{{ products|length }} products found</span>
+                </div>
+                <div>
+                    <select class="form-select">
+                        <option selected>Sort by</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name-asc">Name: A to Z</option>
+                        <option value="name-desc">Name: Z to A</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 product-card">
+                        <a href="{{ product.get_absolute_url }}">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/vivov50.7f217e1f.png"
+                                class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title product-title">{{ product.name }}</h5>
+                            <p class="card-text text-danger">
+                                <s>PKR: {{ product.original_price }}</s>
+                            </p>
+                            <p class="card-text text-danger fw-bold">
+                                PKR: {{ product.price }}
+                            </p>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-alfa">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p>No products found in this category. Check back later!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link bg-alfa-primary border-danger" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link text-alfa" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link text-alfa" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link text-alfa" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
