@@ -63,7 +63,7 @@
     <!-- Similar items with detailed scores -->
     <div class="card">
         <div class="card-header bg-alfa-primary text-white">
-            <h4 class="mb-0">Similar Items with Detailed Similarity Scores</h4>
+            <h4 class="mb-0">Similar Items with Detailed Similarity</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -71,7 +71,6 @@
                     <thead>
                         <tr>
                             <th>Product</th>
-                            <th>Score</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Actions</th>
@@ -102,7 +101,6 @@
                                     <small class="text-muted">(Product not found in database)</small>
                                     {% endif %}
                                 </td>
-                                <td>{{ item.score|floatformat:6 }}</td>
                                 <td>
                                     {% if 'product' in item %}
                                     {{ item.product.category.name }}

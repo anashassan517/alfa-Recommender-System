@@ -19,28 +19,6 @@ def product_list(request, category_slug=None):
     }
     return render(request, 'products/product_list.html', context)
 
-# def product_detail(request, id, slug):
-#     product = get_object_or_404(Product, id=id, slug=slug, available=True)
-#     cart_product_form = CartAddProductForm()
-    
-#     # Record view feedback in gorse if user is authenticated
-#     if request.user.is_authenticated:
-#         gorse_client = GorseClient()
-#         gorse_client.insert_feedback(request.user.id, product.gorse_item_id, 'view')
-    
-#     # Get similar products recommendation
-#     gorse_client = GorseClient()
-#     similar_item_ids = gorse_client.get_recommend_items(product.gorse_item_id, n=4)
-#     similar_products = Product.objects.filter(gorse_item_id__in=similar_item_ids)
-    
-#     context = {
-#         'product': product,
-#         'cart_product_form': cart_product_form,
-#         'similar_products': similar_products
-#     }
-#     return render(request, 'products/product_detail.html', context)
-# Update the product_detail function
-
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
