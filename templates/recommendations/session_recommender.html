@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Session Recommendations | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Session-Based Recommendations</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Session Recommender</h4>
+                </div>
+                <div class="card-body">
+                    <form id="sessionRecommendForm">
+                        <div class="mb-3">
+                            <label for="excludeItems" class="form-label">Exclude Items (comma-separated IDs)</label>
+                            <input type="text" class="form-control" id="excludeItems" placeholder="e.g., item1,item2,item3">
+                        </div>
+                        <div class="mb-3">
+                            <label for="numRecommendations" class="form-label">Number of Recommendations</label>
+                            <input type="number" class="form-control" id="numRecommendations" min="1" max="50" value="10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category (optional)</label>
+                            <select class="form-control" id="category">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-alfa">Get Recommendations</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">How It Works</h4>
+                </div>
+                <div class="card-body">
+                    <p>Session-based recommendations take into account your recent browsing and interactions to provide more contextually relevant suggestions.</p>
+                    <p>Unlike user-based recommendations, session recommendations don't need a user profile history and work well for new or anonymous users.</p>
+                    <p>You can exclude specific items (useful for items already in cart) and filter by category.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-alfa-primary text-white">
+                    <h4 class="mb-0">Recommended Products</h4>
+                </div>
+                <div class="card-body">
+                    <div id="sessionRecommendations" class="row">
+                        <div class="col-12 text-center">
+                            <p>Click "Get Recommendations" to see personalized product suggestions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Function to get CSRF token from cookies
+    function getCsrfToken() {
+        const name = 'csrftoken';
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith(name + '='));
+        
+        if (cookieValue) {
+            return cookieValue.split('=')[1];
+        }
+        return '';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('sessionRecommendForm');
+        const container = document.getElementById('sessionRecommendations');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const excludeItems = document.getElementById('excludeItems').value.split(',').filter(item => item.trim() !== '');
+            const numRecommendations = document.getElementById('numRecommendations').value;
+            const category = document.getElementById('category').value;
+            
+            // Show loading state
+            container.innerHTML = `
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `;
+            
+            // Prepare request data
+            const requestData = {
+                exclude: excludeItems,
+                num: parseInt(numRecommendations)
+            };
+            
+            // Determine endpoint based on category
+            const endpoint = category 
+                ? `/recommendations/api/session/recommend/${category}/`
+                : '/recommendations/api/session/recommend/';
+            
+            // Make API request
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="alert alert-danger">Error: ${data.error}</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (data.products && data.products.length > 0) {
+                    // Build product cards
+                    let html = '';
+                    data.products.forEach(product => {
+                        html += `
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <div class="card h-100 product-card">
+                                    <a href="${product.url}">
+                                        <img src="${product.image_url || 'https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg'}" 
+                                            class="card-img-top" alt="${product.name}">
+                                    </a>
+                                    <div class="card-body">
+                                        <h5 class="card-title product-title">${product.name}</h5>
+                                        <p class="card-text text-danger fw-bold">$${product.price}</p>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="${product.url}" class="btn btn-sm btn-alfa">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div class="col-12 text-center">
+                            <div class="alert alert-info">
+                                <h4>No recommendations found</h4>
+                                <p>Try different filter options or browse our products.</p>
+                                <a href="{% url 'products:product_list' %}" class="btn btn-alfa mt-3">Browse Products</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching recommendations:', error);
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <h4>Error fetching recommendations</h4>
+                            <p>Please try again later.</p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    });
+</script>
+{% endblock %}

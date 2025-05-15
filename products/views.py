@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
 from recommendations.gorse_client import GorseClient
 from cart.forms import CartAddProductForm
+from tracking.models import record_user_feedback
 
 def product_list(request, category_slug=None):
     category = None
@@ -23,14 +24,9 @@ def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
     
-    # Record view feedback in gorse if user is authenticated
+    # Record view feedback 
     if request.user.is_authenticated:
-        gorse_client = GorseClient()
-        gorse_client.insert_feedback(
-            str(request.user.id), 
-            product.gorse_item_id, 
-            'view'
-        )
+        record_user_feedback(request.user, product, 'view')
     
     # Get similar products recommendation from gorse.io
     gorse_client = GorseClient()

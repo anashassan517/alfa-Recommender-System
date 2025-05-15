@@ -22,11 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Custom apps
+    'users',
     'core',
     'products',
-    'users',
     'cart',
     'recommendations',
+    'tracking',  # Add the new tracking app
 ]
 
 MIDDLEWARE = [
@@ -37,8 +38,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tracking.middleware.UserActionMiddleware',  # Add the new middleware
     'recommendations.middleware.UserFeedbackMiddleware',
-
 ]
 
 ROOT_URLCONF = 'alfa_mall.urls'

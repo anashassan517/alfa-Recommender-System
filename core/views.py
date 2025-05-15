@@ -10,7 +10,7 @@ def home(request):
     gorse_client = GorseClient()
     
     try:
-        popular_item_ids = gorse_client.get_popular_items(n=8)
+        popular_item_ids = gorse_client.get_user_neighbors(n=8)
         popular_products = Product.objects.filter(gorse_item_id__in=popular_item_ids)
         print(f"core views popular_item_ids: {popular_item_ids} popular_products: {popular_products}")
     except Exception as e:

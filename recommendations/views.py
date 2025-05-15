@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.models import User
+import json
 from .gorse_client import GorseClient
 from products.models import Product, Category
 import logging
@@ -288,3 +290,131 @@ def get_recommendations_json(request):
                 })
     
     return JsonResponse({'products': products})
+
+@login_required
+def user_neighbors(request):
+    """Show users similar to the current user"""
+    gorse_client = GorseClient()
+    
+    # Get similar users
+    neighbors_response = gorse_client.get_user_neighbors(str(request.user.id), n=20)
+    
+    # Extract user IDs
+    neighbor_ids = []
+    for neighbor in neighbors_response:
+        if isinstance(neighbor, dict) and 'UserId' in neighbor:
+            neighbor_ids.append(neighbor['UserId'])
+        elif isinstance(neighbor, str):
+            neighbor_ids.append(neighbor)
+    
+    # Get Django user objects for the neighbors
+    neighbor_users = User.objects.filter(id__in=neighbor_ids)
+    
+    # Create a dictionary of users for proper ordering
+    users_dict = {str(user.id): user for user in neighbor_users}
+    
+    # Enhance neighbor data with user information
+    neighbors_with_data = []
+    for i, neighbor_id in enumerate(neighbor_ids):
+        if neighbor_id in users_dict:
+            neighbors_with_data.append({
+                'user': users_dict[neighbor_id],
+                'similarity_score': neighbors_response[i].get('Score', 0) if isinstance(neighbors_response[i], dict) else 0,
+                'rank': i + 1
+            })
+    
+    context = {
+        'similar_users': neighbors_with_data,
+        'categories': Category.objects.all(),
+    }
+    return render(request, 'recommendations/user_neighbors.html', context)
+
+@login_required
+def api_session_recommend(request):
+    """API endpoint for session-based recommendations"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id', str(request.user.id))
+        num = data.get('num', 10)
+        exclude = data.get('exclude', [])
+        
+        gorse_client = GorseClient()
+        items = gorse_client.get_session_recommend(user_id, num=num, exclude=exclude)
+        
+        # Extract item IDs
+        item_ids = []
+        for item in items:
+            if isinstance(item, dict) and 'ItemId' in item:
+                item_ids.append(item['ItemId'])
+            elif isinstance(item, str):
+                item_ids.append(item)
+        
+        # Get product details
+        products = Product.objects.filter(gorse_item_id__in=item_ids)
+        products_dict = {p.gorse_item_id: p for p in products}
+        
+        # Build response with product details
+        recommendations = []
+        for i, item_id in enumerate(item_ids):
+            if item_id in products_dict:
+                product = products_dict[item_id]
+                recommendations.append({
+                    'id': product.id,
+                    'name': product.name,
+                    'price': str(product.price),
+                    'image_url': product.image.url if product.image else None,
+                    'url': product.get_absolute_url(),
+                })
+        
+        return JsonResponse({'products': recommendations})
+    except Exception as e:
+        logger.error(f"Error in session recommend API: {e}")
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+def api_session_recommend_by_category(request, category):
+    """API endpoint for category-based session recommendations"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST requests allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id', str(request.user.id))
+        num = data.get('num', 10)
+        exclude = data.get('exclude', [])
+        
+        gorse_client = GorseClient()
+        items = gorse_client.get_session_recommend_by_category(category, user_id, num=num, exclude=exclude)
+        
+        # Extract item IDs
+        item_ids = []
+        for item in items:
+            if isinstance(item, dict) and 'ItemId' in item:
+                item_ids.append(item['ItemId'])
+            elif isinstance(item, str):
+                item_ids.append(item)
+        
+        # Get product details
+        products = Product.objects.filter(gorse_item_id__in=item_ids)
+        products_dict = {p.gorse_item_id: p for p in products}
+        
+        # Build response with product details
+        recommendations = []
+        for i, item_id in enumerate(item_ids):
+            if item_id in products_dict:
+                product = products_dict[item_id]
+                recommendations.append({
+                    'id': product.id,
+                    'name': product.name,
+                    'price': str(product.price),
+                    'image_url': product.image.url if product.image else None,
+                    'url': product.get_absolute_url(),
+                })
+        
+        return JsonResponse({'products': recommendations})
+    except Exception as e:
+        logger.error(f"Error in category session recommend API: {e}")
+        return JsonResponse({'error': str(e)}, status=500)

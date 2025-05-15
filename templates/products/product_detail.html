@@ -20,7 +20,7 @@
                 {% if product.image %}
                 <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
                 {% else %}
-                <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/vivov50.7f217e1f.png" class="img-fluid rounded" alt="{{ product.name }}">
+                <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="img-fluid rounded" alt="{{ product.name }}">
                 {% endif %}
             </div>
         </div>
@@ -92,29 +92,7 @@
     
     <!-- Similar Products -->
     {% if similar_products %}
-    <!-- <section class="mt-5">
-        <h3 class="mb-4">You may also like</h3>
-        <div class="row">
-            {% for product in similar_products %}
-            <div class="col-md-3 mb-4">
-                <div class="card h-100 product-card">
-                    <a href="{{ product.get_absolute_url }}">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                        {% else %}
-                        <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/vivov50.7f217e1f.png" class="card-img-top" alt="{{ product.name }}">
-                        {% endif %}
-                    </a>
-                    <div class="card-body">
-                        <h5 class="card-title product-title">{{ product.name }}</h5>
-                        <p class="card-text text-danger fw-bold">${{ product.price }}</p>
-                        <a href="{{ product.get_absolute_url }}" class="btn btn-alfa">View Details</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section> -->
+    
     <section class="mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3>You may also like</h3>

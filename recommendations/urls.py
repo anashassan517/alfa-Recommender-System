@@ -14,4 +14,9 @@ urlpatterns = [
     
     # API for AJAX recommendations
     path('api/get-recommendations/', views.get_recommendations_json, name='get_recommendations_json'),
+    
+    # New URL patterns
+    path('similar-users/', views.user_neighbors, name='user_neighbors'),
+    path('api/session/recommend/', views.api_session_recommend, name='api_session_recommend'),
+    path('api/session/recommend/<str:category>/', views.api_session_recommend_by_category, name='api_session_recommend_by_category'),
 ]

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Similar Users | Alfa Mall{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-alfa">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'recommendations:explore' %}" class="text-alfa">Recommendations</a></li>
+                <li class="breadcrumb-item active">Similar Users</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h2 class="mb-4">Users Similar to You</h2>
+    
+    <!-- Debug info -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Debug Information</h5>
+        </div>
+        <div class="card-body bg-light">
+            <p><strong>Total Similar Users:</strong> {{ similar_users|length }}</p>
+            <p><strong>Current User:</strong> {{ request.user.username }}</p>
+            <p><strong>Timestamp:</strong> {% now "Y-m-d H:i:s" %}</p>
+        </div>
+    </div>
+    
+    <!-- Similar users list -->
+    <div class="card">
+        <div class="card-header bg-alfa-primary text-white">
+            <h4 class="mb-0">Similar Users</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Similarity Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for neighbor in similar_users %}
+                            <tr>
+                                <td>{{ neighbor.rank }}</td>
+                                <td>{{ neighbor.user.username }}</td>
+                                <td>{{ neighbor.similarity_score|floatformat:4 }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-alfa">View Profile</a>
+                                    <a href="{% url 'recommendations:user_recommendations' %}?source_user={{ neighbor.user.id }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-star"></i> View Recommendations
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No similar users found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

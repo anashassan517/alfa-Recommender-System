@@ -1,4 +1,3 @@
-
 import requests
 import json
 import logging
@@ -143,3 +142,68 @@ class GorseClient:
         except Exception as e:
             logger.error(f"Error inserting item: {e}")
             return False
+
+    def insert_user(self, user_data):
+        """Insert or update a user in Gorse"""
+        endpoint = "/api/user"
+        url = f"{self.base_url}{endpoint}"
+        try:
+            response = requests.post(url, json=user_data, headers=self.headers)
+            response.raise_for_status()
+            return self._log_response(endpoint, {'status': 'success', 'user': user_data})
+        except Exception as e:
+            logger.error(f"Error inserting user: {e}")
+            return False
+
+    def get_session_recommend(self, user_id, num=10, exclude=None):
+        """Get session-based recommendations for a user"""
+        endpoint = "/api/session/recommend"
+        url = f"{self.base_url}{endpoint}"
+        data = {
+            'user_id': str(user_id),
+            'num': num
+        }
+        if exclude:
+            data['exclude'] = exclude
+        
+        try:
+            response = requests.post(url, json=data, headers=self.headers)
+            response.raise_for_status()
+            return self._log_response(endpoint, response.json())
+        except Exception as e:
+            logger.error(f"Error getting session recommendations: {e}")
+            return []
+
+    def get_session_recommend_by_category(self, category, user_id, num=10, exclude=None):
+        """Get session-based recommendations for a user within a specific category"""
+        endpoint = f"/api/session/recommend/{category}"
+        url = f"{self.base_url}{endpoint}"
+        data = {
+            'user_id': str(user_id),
+            'num': num
+        }
+        if exclude:
+            data['exclude'] = exclude
+        
+        try:
+            response = requests.post(url, json=data, headers=self.headers)
+            response.raise_for_status()
+            return self._log_response(endpoint, response.json())
+        except Exception as e:
+            logger.error(f"Error getting category session recommendations: {e}")
+            return []
+
+    def get_user_neighbors(self, user_id, n=10, offset=0):
+        """Get similar users (user neighbors)"""
+        endpoint = f"/api/user/{user_id}/neighbors"
+        url = f"{self.base_url}{endpoint}"
+        params = {'n': n, 'offset': offset}
+        
+        try:
+            response = requests.get(url, headers=self.headers, params=params)
+            print("similar user response:",response)
+            response.raise_for_status()
+            return self._log_response(endpoint, response.json(), params)
+        except Exception as e:
+            logger.error(f"Error getting user neighbors: {e}")
+            return []

@@ -1,10 +1,9 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from products.models import Product
 from .models import Cart
 from .forms import CartAddProductForm
-from recommendations.gorse_client import GorseClient
+from tracking.models import record_user_feedback
 
 @require_POST
 def cart_add(request, product_id):
@@ -16,14 +15,9 @@ def cart_add(request, product_id):
         cd = form.cleaned_data
         cart.add(product=product, quantity=cd['quantity'], override_quantity=cd['override'])
         
-        # Record cart interaction in gorse if user is authenticated
+        # Record cart interaction
         if request.user.is_authenticated:
-            gorse_client = GorseClient()
-            gorse_client.insert_feedback(
-                str(request.user.id), 
-                product.gorse_item_id, 
-                'cart'
-            )
+            record_user_feedback(request.user, product, 'cart')
     
     return redirect('cart:cart_detail')
 

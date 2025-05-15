@@ -69,6 +69,17 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 recommendation-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-people" style="font-size: 3rem; color: var(--primary-color);"></i>
+                    <h3 class="card-title mt-3">Similar Users</h3>
+                    <p class="card-text">Discover users with similar preferences and tastes</p>
+                    <a href="{% url 'recommendations:user_neighbors' %}" class="btn btn-alfa mt-3">Find Similar Users</a>
+                </div>
+            </div>
+        </div>
     </div>
     
     <h2 class="mb-4 mt-5">Popular Categories</h2>
