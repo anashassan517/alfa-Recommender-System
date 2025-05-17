@@ -7,6 +7,10 @@
     <title>{% block title %}Alfa Mall{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Swiper Carousel CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Animate.css for micro-animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- Custom CSS -->
     <style>
         :root {
@@ -18,54 +22,91 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fff;
         }
 
         .bg-alfa-primary {
-            background-color: var(--primary-color);
+            background-color: var(--primary-color) !important;
         }
 
         .bg-alfa-secondary {
-            background-color: var(--secondary-color);
+            background-color: var(--secondary-color) !important;
         }
 
         .text-alfa {
-            color: var(--primary-color);
+            color: var(--primary-color) !important;
         }
 
         .btn-alfa {
-            background-color: var(--primary-color);
+            background: linear-gradient(90deg, #e60000 60%, #ff3333 100%);
             color: var(--text-light);
             border: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.08);
         }
 
-        .btn-alfa:hover {
-            background-color: var(--accent-color);
-            color: var(--text-light);
+        .btn-alfa:hover,
+        .btn-alfa:focus {
+            background: linear-gradient(90deg, #ff3333 60%, #e60000 100%);
+            color: #fff;
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 6px 24px rgba(230, 0, 0, 0.15);
         }
 
-        .nav-link {
-            color: var(--text-light) !important;
+        .navbar {
+            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.06);
+            transition: background 0.3s, box-shadow 0.3s;
         }
 
-        .nav-link:hover {
-            color: rgba(255, 255, 255, 0.8) !important;
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.7rem;
+            letter-spacing: 1px;
+        }
+
+        .navbar-brand svg {
+            height: 36px;
+            margin-right: 10px;
+        }
+
+        .nav-link,
+        .dropdown-item {
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-link.active,
+        .dropdown-item.active {
+            color: #fff !important;
+            background: var(--accent-color) !important;
+        }
+
+        .nav-link:hover,
+        .dropdown-item:hover {
+            color: #fff !important;
+            background: var(--primary-color) !important;
         }
 
         .product-card {
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             height: 100%;
+            border-radius: 18px;
+            overflow: hidden;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(230, 0, 0, 0.13);
         }
 
         .card-img-top {
-            height: 200px;
+            height: 210px;
             object-fit: contain;
             padding: 10px;
+            background: #fff;
+            border-bottom: 1px solid #f3f3f3;
         }
 
         .product-title {
@@ -76,30 +117,95 @@
             -webkit-box-orient: vertical;
         }
 
+        .badge-animated {
+            animation: bounceIn 1s;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .swiper {
+            width: 100%;
+            padding-bottom: 32px;
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color);
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--primary-color);
+        }
+
+        .animated-cta {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 0, 0, 0.3);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(230, 0, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 0, 0, 0);
+            }
+        }
+
+        .lottie-anim {
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+        }
+
         footer {
-            background-color: var(--primary-color);
+            background: linear-gradient(90deg, #e60000 60%, #ff3333 100%);
             color: var(--text-light);
             padding: 30px 0;
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
+{% load static %}
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-alfa-primary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-alfa-primary sticky-top animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:home' %}">
-                <strong>ALFA MALL</strong>
-            </a>
+                <!-- Alfa Mall SVG Logo Placeholder -->
+                 <!-- alfamall_logo svg is in static folder -->
+                 <img src="{% static 'alfamall-logo-trans.png' %}" alt="Alfa Mall Logo" style="height: 70px; margin-right: 100px;">
+                 <!--  this image should show in white background -->
+                </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    
-                    
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             Categories
@@ -135,6 +241,7 @@
                                     Items</a></li>
                             <li><a class="dropdown-item" href="{% url 'recommendations:user_neighbors' %}">Similar Users</a></li>
                         </ul>
+                    </li>
                 </ul>
                 <div class="d-flex align-items-center">
                     <form class="d-flex me-2" action="{% url 'products:product_list' %}" method="get">
@@ -163,58 +270,47 @@
                     </div>
                     <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative">
                         <i class="bi bi-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-animated">
                             {{ cart|length }}
                         </span>
                     </a>
                 </div>
-                <!-- Add this to your navbar in base.html -->
-                <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Recommendations
-        </a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'recommendations:explore' %}">Explore All</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'recommendations:user_recommendations' %}">For You</a></li>
-            <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}">Popular Items</a></li>
-            <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}">Latest Items</a></li>
-        </ul>
-    </li> -->
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="py-5">
+    <main class="py-5 animate__animated animate__fadeInUp">
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-alfa-primary text-light">
+    <footer class="bg-alfa-primary text-light animate__animated animate__fadeInUp animate__delay-1s">
         <div class="container py-4">
             <div class="row">
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Alfa Mall</h5>
-                    <p class="small">
+                    <img src="{% static 'alfamall-logo-trans.png' %}" alt="Alfa Mall Logo" style="height: 120px; margin-right: 150px;">
+<!-- 
+                    <h5 class="text-uppercase">Alfa Mall</h5> -->
+                    <!-- <p class="small">
                         Your one-stop shop for electronics, fashion, and more.
-                    </p>
+                    </p> -->
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                     <h5 class="text-uppercase">Quick Links</h5>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-2">
+                        <li class="mb-1">
                             <a href="{% url 'core:home' %}" class="text-light text-decoration-none">Home</a>
                         </li>
-                        <li class="mb-2">
+                        <li class="mb-1">
                             <a href="{% url 'products:product_list' %}"
                                 class="text-light text-decoration-none">Products</a>
                         </li>
-                        <li class="mb-2">
+                        <li class="mb-1">
                             <a href="{% url 'core:about' %}" class="text-light text-decoration-none">About Us</a>
                         </li>
-                        <li class="mb-2">
+                        <li class="mb-1">
                             <a href="{% url 'core:contact' %}" class="text-light text-decoration-none">Contact</a>
                         </li>
                     </ul>
@@ -223,7 +319,7 @@
                     <h5 class="text-uppercase">Categories</h5>
                     <ul class="list-unstyled mb-0">
                         {% for category in categories %}
-                        <li class="mb-2">
+                        <li class="mb-1">
                             <a href="{{ category.get_absolute_url }}" class="text-light text-decoration-none">
                                 {{ category.name }}
                             </a>
@@ -256,6 +352,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper Carousel JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Lottie Animation JS (for micro-animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 

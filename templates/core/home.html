@@ -1,100 +1,171 @@
 {% extends 'base.html' %}
 
 {% block title %}Alfa Mall - Your Shopping Destination{% endblock %}
+{% load static %}
 
 {% block content %}
-<!-- Hero Banner -->
-<section class="bg-alfa-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="display-4 fw-bold mb-4">Welcome to Alfa Mall</h1>
-                <p class="lead mb-4">Discover the best deals on electronics, fashion, mobiles, bikes, and accessories.</p>
-                <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg px-4">Shop Now</a>
-            </div>
-            <div class="col-md-6">
-                <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/budgeted-phones-50k.jpg" alt="Shopping at Alfa Mall" class="img-fluid rounded">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Products -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Featured Products</h2>
-        <div class="row">
-            {% for product in featured_products|slice:":4" %}
-            <div class="col-md-3 mb-4">
-                <div class="card h-100 product-card">
-                    <a href="{{ product.get_absolute_url }}">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                        {% else %}
-                        <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="card-img-top" alt="{{ product.name }}">
-                        {% endif %}
-                    </a>
-                    <div class="card-body">
-                        <h5 class="card-title product-title">{{ product.name }}</h5>
-                        <p class="card-text text-danger">
-                            <s>PKR: {{ product.original_price }}</s>
-                        </p>
-                        <p class="card-text text-danger fw-bold">
-                            Discounted Price: {{ product.price }}
-                        </p>
-                        <a href="{{ product.get_absolute_url }}" class="btn btn-alfa">View Details</a>
+<!-- Hero Banner Carousel -->
+<section class="pb-0">
+    <div class="container-fluid px-0">
+        <div class="swiper hero-swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="position-relative bg-alfa-primary text-white" style="min-height:340px;">
+                        <!-- <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/budgeted-phones-50k.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="Offer 1"> -->
+                        <!-- <img src="https://cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="w-100 h-100 object-fit-cover opacity-0.2" style="min-height:340px;max-height:420px;object-fit:cover;" alt="alfa maLL Logo"> -->
+                        <img src="{% static 'alfamall-logo.png' %}" alt="Alfa Mall Logo" class="w-100 h-100 object-fit-cover opacity-0.2" style="min-height:340px;max-height:420px;object-fit:cover;" >
+                        <div class="position-absolute top-50 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
+                            <h1 class="display-4 fw-bold mb-3">Welcome to Alfa Mall</h1>
+                            <p class="lead mb-4">Discover the best deals on electronics, fashion, mobiles, bikes, and accessories.</p>
+                            <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg px-4 animated-cta">Shop Now <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="position-relative bg-alfa-secondary text-white" style="min-height:340px;">
+                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/xiaomilarge2025.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="Offer 2">
+                        <div class="position-absolute top-55 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
+                            <!-- <h1 class="display-4 fw-bold mb-3">Seasonal Sale is Live!</h1>
+                            <p class="lead mb-4">Up to <span class="fw-bold">50% OFF</span> on select categories. Limited time only.</p> -->
+                            <a href="{% url 'products:product_list' %}?sale=seasonal" class="btn btn-light btn-lg px-4 animated-cta">Explore Offers <i class="bi bi-fire"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="position-relative bg-alfa-primary text-white" style="min-height:340px;">
+                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/iphone16series.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="New Arrivals">
+                        <div class="position-absolute top-50 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
+                            <!-- <h1 class="display-4 fw-bold mb-3">New Arrivals</h1> -->
+                            <!-- <p class="lead mb-4">Check out the latest products curated just for you.</p> -->
+                            <a href="{% url 'recommendations:latest_items' %}" class="btn btn-light btn-lg px-4 animated-cta">See New Arrivals <i class="bi bi-stars"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p>No featured products available at the moment.</p>
-            </div>
-            {% endfor %}
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </div>
 </section>
 
-<!-- Categories -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Shop by Category</h2>
-        <div class="row">
-            {% for category in categories %}
-            <div class="col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ category.name }}</h5>
-                        <a href="{{ category.get_absolute_url }}" class="btn btn-alfa">Browse</a>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p>No categories available.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Personalized Recommendations via AJAX -->
-{% if user.is_authenticated %}
+<!-- Featured Products Carousel -->
 <section class="py-5">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Recommended For You</h2>
-            <a href="{% url 'recommendations:user_recommendations' %}" class="btn btn-outline-danger">
-                See all recommendations <i class="bi bi-arrow-right"></i>
+            <h2 class="mb-0"><i class="bi bi-star-fill text-alfa me-2"></i>Featured Products</h2>
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-danger">Browse All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="swiper featured-swiper">
+            <div class="swiper-wrapper">
+                {% for product in featured_products|slice:":8" %}
+                <div class="swiper-slide">
+                    <div class="card h-100 product-card animate__animated animate__fadeInUp">
+                        <a href="{{ product.get_absolute_url }}">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title product-title">{{ product.name }}</h5>
+                            <p class="card-text text-danger mb-1">
+                                <s>PKR: {{ product.original_price }}</s>
+                            </p>
+                            <p class="card-text text-danger fw-bold mb-2">
+                                Discounted Price: {{ product.price }}
+                            </p>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-alfa btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="swiper-slide">
+                    <div class="card h-100 product-card text-center p-5">
+                        <p>No featured products available at the moment.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Carousel -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5"><i class="bi bi-grid-3x3-gap-fill text-alfa me-2"></i>Shop by Category</h2>
+        <div class="swiper categories-swiper">
+            <div class="swiper-wrapper">
+                {% for category in categories %}
+                <div class="swiper-slide">
+                    <div class="card h-100 animate__animated animate__fadeInUp category-card position-relative overflow-hidden" style="transition:box-shadow 0.3s, transform 0.3s;">
+                        <div class="category-bg position-absolute top-0 start-0 w-100 h-100" style="z-index:0; opacity:0.08; background: radial-gradient(circle at 60% 40%, #e60000 0%, #fff 100%);"></div>
+                        <div class="card-body text-center position-relative" style="z-index:1;">
+                            <div class="mb-12 category-icon-wrapper">
+                                {% if category.name|lower == 'accessories' %}
+                                    <i class="bi bi-headphones category-icon" style="font-size:2.5rem;"></i>
+                                {% elif category.name|lower == 'electronics' %}
+                                    <i class="bi bi-cpu category-icon" style="font-size:2.5rem;"></i>
+                                {% elif category.name|lower == 'gaming & laptops' %}
+                                    <i class="bi bi-controller category-icon" style="font-size:2.5rem;"></i>
+                                {% elif category.name|lower == 'led tv' %}
+                                    <i class="bi bi-tv category-icon" style="font-size:2.5rem;"></i>
+                                {% elif category.name|lower == 'mobile phones & tablets' %}
+                                    <i class="bi bi-phone category-icon" style="font-size:2.5rem;"></i>
+                                {% elif category.name|lower == 'watches' %}
+                                    <i class="bi bi-watch category-icon" style="font-size:2.5rem;"></i>
+                                {% else %}
+                                    <i class="bi bi-box category-icon" style="font-size:2.5rem;"></i>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ category.name }}</h5>
+                            <a href="{{ category.get_absolute_url }}" class="btn btn-alfa mt-2 category-btn">Browse</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="swiper-slide">
+                    <div class="card h-100 text-center p-5">
+                        <p>No categories available.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Personalized Recommendations Carousel -->
+{% if user.is_authenticated %}
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0"><i class="bi bi-person-heart text-alfa me-2"></i>Recommended For You</h2>
+            <a href="{% url 'recommendations:user_recommendations' %}" class="btn btn-outline-danger animated-cta">
+                Explore Your Picks <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-
-        <div id="personalizedRecommendations" class="row">
-            <div class="col-12 text-center py-4">
-                <div class="spinner-border text-danger" role="status">
-                    <span class="visually-hidden">Loading...</span>
+        <div id="personalizedRecommendationsCarousel" class="swiper personalized-swiper">
+            <div class="swiper-wrapper" id="personalizedRecommendations">
+                <div class="swiper-slide">
+                    <div class="card h-100 product-card text-center p-5">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </div>
 </section>
@@ -103,29 +174,131 @@
 <!-- Special Offer -->
 <section class="py-5 bg-alfa-secondary text-white">
     <div class="container text-center">
-        <h2 class="mb-4">Special Offer</h2>
+        <h2 class="mb-4 animate__animated animate__pulse animate__infinite">Special Offer</h2>
         <p class="lead mb-4">Sign up today and get 20% off your first purchase!</p>
-        <a href="{% url 'users:register' %}" class="btn btn-light btn-lg">Sign Up Now</a>
+        <a href="{% url 'users:register' %}" class="btn btn-light btn-lg animated-cta">Sign Up Now <i class="bi bi-gift"></i></a>
     </div>
 </section>
 {% endblock %}
 
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* .category-card {
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.3s;
+} */
+.categories-swiper .swiper-slide {
+  display: block;         /* overrides Swiper’s flex */
+  height: auto;           /* let the card inside dictate height */
+}
+
+/* 2) Force all category-cards to the same size, and use flex layout */
+.category-card {
+  /* you can tweak these dimensions as you like */
+  width: 70%;            /* slide width is handled by Swiper’s breakpoints */
+  height: 200px;          /* fix each card to the same height */
+  
+  display: flex;
+  flex-direction: column;
+}
+.category-card:hover {
+    box-shadow: 0 8px 32px rgba(230,0,0,0.13);
+    transform: translateY(-6px) scale(1.04);
+    z-index: 2;
+}
+.category-icon {
+    color: #e60000;
+    transition: color 0.3s, transform 0.3s;
+}
+.category-card:hover .category-icon {
+    color: #ff3333;
+    transform: scale(1.15) rotate(-8deg);
+    animation: pulse 0.7s;
+}
+.category-btn {
+    margin: initial;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.category-card:hover .category-btn {
+    background: #fff;
+    color: #e60000;
+    box-shadow: 0 2px 8px rgba(230,0,0,0.12);
+    border: 1px solid #e60000;
+}
+.category-card .card-body {
+  flex: 1;                          /* fill available vertical space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* logo+title up top, button down low */
+}
+</style>
+{% endblock %}
+
 {% block extra_js %}
 {{ block.super }}
-{% if user.is_authenticated %}
 <script>
+    // Hero Banner Swiper
+    new Swiper('.hero-swiper', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
+        navigation: { nextEl: '.hero-swiper .swiper-button-next', prevEl: '.hero-swiper .swiper-button-prev' },
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+    });
+    // Featured Products Swiper
+    new Swiper('.featured-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        loop: true,
+        breakpoints: {
+            576: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            992: { slidesPerView: 4 },
+        },
+        pagination: { el: '.featured-swiper .swiper-pagination', clickable: true },
+        navigation: { nextEl: '.featured-swiper .swiper-button-next', prevEl: '.featured-swiper .swiper-button-prev' },
+    });
+    // Categories Swiper
+    new Swiper('.categories-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true,
+        breakpoints: {
+            576: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+            992: { slidesPerView: 6 },
+        },
+        pagination: { el: '.categories-swiper .swiper-pagination', clickable: true },
+        navigation: { nextEl: '.categories-swiper .swiper-button-next', prevEl: '.categories-swiper .swiper-button-prev' },
+    });
+    // Personalized Recommendations Swiper (populated via AJAX)
+    let personalizedSwiper = new Swiper('.personalized-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        loop: true,
+        breakpoints: {
+            576: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            992: { slidesPerView: 4 },
+        },
+        pagination: { el: '.personalized-swiper .swiper-pagination', clickable: true },
+        navigation: { nextEl: '.personalized-swiper .swiper-button-next', prevEl: '.personalized-swiper .swiper-button-prev' },
+    });
+    // AJAX for Personalized Recommendations
+   
     document.addEventListener('DOMContentLoaded', function() {
-        const container = document.getElementById('personalizedRecommendations');
-
         fetch('/recommendations/api/get-recommendations/?type=recommended')
             .then(response => response.json())
             .then(data => {
+                const container = document.getElementById('personalizedRecommendations');
                 if (data.products && data.products.length > 0) {
                     let html = '';
                     data.products.forEach(product => {
                         html += `
-                            <div class="col-md-3 col-sm-6 mb-4">
-                                <div class="card h-100 product-card">
+                            <div class="swiper-slide">
+                                <div class="card h-100 product-card animate__animated animate__fadeInUp">
                                     <a href="${product.url}">
                                         <img src="${product.image_url || 'https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg'}"
                                             class="card-img-top" alt="${product.name}">
@@ -133,34 +306,44 @@
                                     <div class="card-body">
                                         <h5 class="card-title product-title">${product.name}</h5>
                                         <p class="card-text text-danger fw-bold">PKR ${product.price}</p>
-                                        <a href="${product.url}" class="btn btn-sm btn-alfa">View Details</a>
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <a href="${product.url}" class="btn btn-sm btn-alfa">View Details</a>
+                                            <button class="btn btn-outline-danger btn-sm" title="Add to Wishlist"><i class="bi bi-heart"></i></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         `;
                     });
                     container.innerHTML = html;
+                    personalizedSwiper.update();
                 } else {
                     container.innerHTML = `
-                        <div class="col-12 text-center py-4">
-                            <div class="alert alert-info">
-                                We're still learning your preferences! Browse more products to get personalized recommendations.
+                        <div class="swiper-slide">
+                            <div class="card h-100 product-card text-center p-5">
+                                <div class="alert alert-info">
+                                    We're still learning your preferences! Browse more products to get personalized recommendations.
+                                </div>
                             </div>
                         </div>
                     `;
+                    personalizedSwiper.update();
                 }
             })
             .catch(error => {
-                console.error('Error fetching recommendations:', error);
+                const container = document.getElementById('personalizedRecommendations');
                 container.innerHTML = `
-                    <div class="col-12 text-center py-4">
-                        <div class="alert alert-danger">
-                            Error loading recommendations. Please try again.
+                    <div class="swiper-slide">
+                        <div class="card h-100 product-card text-center p-5">
+                            <div class="alert alert-danger">
+                                Error loading recommendations. Please try again.
+                            </div>
                         </div>
                     </div>
                 `;
+                personalizedSwiper.update();
             });
     });
+    
 </script>
-{% endif %}
 {% endblock %}
