@@ -40,7 +40,7 @@
                 <div class="col-md-9">
                     <h5>{{ source_product.name }}</h5>
                     <p><strong>Category:</strong> {{ source_product.category.name }}</p>
-                    <p><strong>Price:</strong> <span class="text-danger">${{ source_product.price }}</span></p>
+                    <p><strong>Price:</strong> <span class="text-danger">PKR: {{ source_product.price }}</span></p>
                     <p><strong>Gorse Item ID:</strong> {{ source_product.gorse_item_id }}</p>
                     <a href="{{ source_product.get_absolute_url }}" class="btn btn-alfa">View Product</a>
                 </div>

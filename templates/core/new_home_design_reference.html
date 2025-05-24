@@ -1,0 +1,804 @@
+{% extends 'base.html' %}
+
+{% block title %}Alfa Mall - Your Shopping Destination{% endblock %}
+{% load static %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Main Color Palette */
+    :root {
+        --primary-red: #e60000;
+        --dark-red: #990000;
+        --light-red: #ff3333;
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+        --dark-gray: #343a40;
+    }
+
+    /* General Styling */
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    section {
+        margin-bottom: 4rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5 {
+        font-weight: 600;
+    }
+
+    /* Button Styles */
+    .btn {
+        transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .btn-alfa-primary {
+        background-color: var(--primary-red);
+        color: var(--white);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(230, 0, 0, 0.2);
+    }
+    
+    .btn-alfa-primary:hover {
+        background-color: var(--light-red);
+        color: var(--white);
+        box-shadow: 0 6px 12px rgba(230, 0, 0, 0.3);
+    }
+    
+    .btn-alfa-primary:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 4px rgba(230, 0, 0, 0.2);
+    }
+
+    /* Header */
+    .header-nav {
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-link {
+        position: relative;
+        margin: 0 0.5rem;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--primary-red);
+        transition: width 200ms ease, left 200ms ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+    /* Hero Carousel */
+    .hero-section {
+        position: relative;
+        margin-top: -1rem;
+    }
+    
+    .hero-slide {
+        height: 550px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.8);
+    }
+    
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translateY(-50%);
+        max-width: 600px;
+        z-index: 2;
+        color: var(--white);
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero-cta {
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 0.875rem 2rem;
+        border-radius: 6px;
+        letter-spacing: 1px;
+        box-shadow: 0 8px 15px rgba(230, 0, 0, 0.3);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .hero-cta:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(230, 0, 0, 0.4);
+    }
+    
+    .hero-cta:active {
+        transform: translateY(0);
+    }
+    
+    .swiper-pagination-bullet {
+        width: 12px;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 1;
+        transition: transform 150ms ease-in-out;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background: var(--primary-red);
+    }
+    
+    .swiper-pagination-bullet:hover {
+        transform: scale(1.3);
+    }
+
+    /* Categories Section */
+    .categories-section {
+        padding: 4rem 0;
+        background-color: var(--light-gray);
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 2.5rem;
+        text-align: center;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: var(--primary-red);
+    }
+    
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    @media (max-width: 992px) {
+        .categories-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .category-card {
+        position: relative;
+        background-color: var(--white);
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        color: var(--primary-red);
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s;
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.1) rotate(-8deg);
+    }
+    
+    .category-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .category-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-red);
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: -1;
+    }
+    
+    .category-card:hover .category-overlay {
+        opacity: 0.05;
+    }
+
+    /* Recommended Products Carousel */
+    .recommended-section {
+        padding: 4rem 0;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .view-all {
+        color: var(--primary-red);
+        font-weight: 500;
+        text-decoration: none;
+        transition: transform 0.2s;
+    }
+    
+    .view-all:hover {
+        transform: translateX(5px);
+    }
+    
+    .products-carousel {
+        position: relative;
+        padding: 0 40px;
+    }
+    
+    .product-card {
+        background-color: var(--white);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.4s, box-shadow 0.4s, border 0.4s;
+        height: 100%;
+        border: 2px solid transparent;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        border-color: rgba(230, 0, 0, 0.1);
+    }
+    
+    .product-img-wrapper {
+        position: relative;
+        height: 220px;
+        padding: 1rem;
+        background-color: #f9f9f9;
+    }
+    
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.5s;
+    }
+    
+    .product-card:hover .product-img {
+        transform: scale(1.05);
+    }
+    
+    .quick-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.4s, transform 0.4s;
+    }
+    
+    .product-card:hover .quick-actions {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-red);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    
+    .action-btn:hover {
+        background-color: var(--primary-red);
+        color: var(--white);
+        transform: scale(1.15);
+    }
+    
+    .product-info {
+        padding: 1.5rem;
+    }
+    
+    .product-title {
+            height: 48px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            font-weight: 500;
+        }
+    
+    .product-price {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+    
+    .price-original {
+        text-decoration: line-through;
+        color: #888;
+        font-size: 0.9rem;
+    }
+    
+    .price-current {
+        color: var(--primary-red);
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+    
+    .carousel-controls {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        left: 0;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .carousel-control {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-red);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: absolute;
+    }
+    
+    .carousel-control:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .control-prev {
+        left: 0;
+    }
+    
+    .control-next {
+        right: 0;
+    }
+
+    /* Special Offer Section */
+    .special-offer {
+        padding: 4rem 0;
+        background: linear-gradient(135deg, var(--dark-red) 0%, var(--primary-red) 100%);
+        color: var(--white);
+        text-align: center;
+    }
+    
+    .offer-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+    
+    .offer-text {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Animation for Add to Cart */
+    .add-to-cart-anim {
+        position: fixed;
+        z-index: 9999;
+        pointer-events: none;
+        font-weight: 600;
+        color: var(--primary-red);
+        animation: flyToCart 1s ease-out forwards;
+    }
+    
+    @keyframes flyToCart {
+        0% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        70% {
+            opacity: 0.7;
+            transform: scale(1.2) translateY(-20px);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0.5) translateY(-50px) translateX(50px);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Carousel -->
+<section class="hero-section">
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+                <div class="hero-slide">
+                    <img src="{% static 'alfamall-logo.png' %}" alt="Alfa Mall" class="hero-img">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Welcome to Alfa Mall</h1>
+                        <p class="hero-subtitle">Discover the best deals on electronics, fashion, and more</p>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-alfa-primary hero-cta">
+                            Shop Now <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="swiper-slide">
+                <div class="hero-slide">
+                    <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/xiaomilarge2025.jpg" alt="Seasonal Sale" class="hero-img">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Seasonal Sale is Live!</h1>
+                        <p class="hero-subtitle">Up to 50% OFF on select categories. Limited time only.</p>
+                        <a href="{% url 'products:product_list' %}?sale=seasonal" class="btn btn-alfa-primary hero-cta">
+                            Explore Offers <i class="fas fa-fire"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="swiper-slide">
+                <div class="hero-slide">
+                    <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/iphone16series.jpg" alt="New Arrivals" class="hero-img">
+                    <div class="hero-content">
+                        <h1 class="hero-title">New Arrivals</h1>
+                        <p class="hero-subtitle">Check out the latest products curated just for you</p>
+                        <a href="{% url 'recommendations:latest_items' %}" class="btn btn-alfa-primary hero-cta">
+                            See New Arrivals <i class="fas fa-star"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        
+        <div class="categories-grid">
+            <!-- Category 1 -->
+            <div class="category-card">
+                <i class="fas fa-mobile-alt category-icon"></i>
+                <h3 class="category-title">Mobile Phones</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            
+            <!-- Category 2 -->
+            <div class="category-card">
+                <i class="fas fa-laptop category-icon"></i>
+                <h3 class="category-title">Laptops & Computing</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            
+            <!-- Category 3 -->
+            <div class="category-card">
+                <i class="fas fa-tv category-icon"></i>
+                <h3 class="category-title">TVs & Entertainment</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            
+            <!-- Category 4 -->
+            <div class="category-card">
+                <i class="fas fa-headphones category-icon"></i>
+                <h3 class="category-title">Audio & Accessories</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            
+            <!-- Category 5 -->
+            <div class="category-card">
+                <i class="fas fa-gamepad category-icon"></i>
+                <h3 class="category-title">Gaming</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            
+            <!-- Category 6 -->
+            <div class="category-card">
+                <i class="fas fa-tshirt category-icon"></i>
+                <h3 class="category-title">Fashion</h3>
+                <a href="#" class="btn btn-outline-danger">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recommended Products Section -->
+<section class="recommended-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Recommended For You</h2>
+            <a href="{% url 'recommendations:user_recommendations' %}" class="view-all">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="products-carousel">
+            <div class="swiper products-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Product 1 -->
+                    <div class="swiper-slide">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="{% static 'alfamall-logo.png' %}" alt="Product 1" class="product-img">
+                                <div class="quick-actions">
+                                    <button class="action-btn add-to-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                    <button class="action-btn add-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn quick-view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">iPhone 16 Pro Max 256GB Titanium</h3>
+                                <div class="product-price">
+                                    <span class="price-original">PKR 599,999</span>
+                                    <span class="price-current">PKR 549,999</span>
+                                </div>
+                                <a href="#" class="btn btn-outline-danger w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="swiper-slide">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="{% static 'alfamall-logo.png' %}" alt="Product 2" class="product-img">
+                                <div class="quick-actions">
+                                    <button class="action-btn add-to-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                    <button class="action-btn add-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn quick-view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">MacBook Air M3 13-inch 16GB RAM 512GB SSD</h3>
+                                <div class="product-price">
+                                    <span class="price-original">PKR 499,999</span>
+                                    <span class="price-current">PKR 459,999</span>
+                                </div>
+                                <a href="#" class="btn btn-outline-danger w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="swiper-slide">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="{% static 'alfamall-logo.png' %}" alt="Product 3" class="product-img">
+                                <div class="quick-actions">
+                                    <button class="action-btn add-to-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                    <button class="action-btn add-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn quick-view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Samsung Galaxy Watch 6 44mm Bluetooth</h3>
+                                <div class="product-price">
+                                    <span class="price-original">PKR 85,999</span>
+                                    <span class="price-current">PKR 79,999</span>
+                                </div>
+                                <a href="#" class="btn btn-outline-danger w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 4 -->
+                    <div class="swiper-slide">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="{% static 'alfamall-logo.png' %}" alt="Product 4" class="product-img">
+                                <div class="quick-actions">
+                                    <button class="action-btn add-to-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                    <button class="action-btn add-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn quick-view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Sony PlayStation 5 Pro 2TB</h3>
+                                <div class="product-price">
+                                    <span class="price-original">PKR 299,999</span>
+                                    <span class="price-current">PKR 279,999</span>
+                                </div>
+                                <a href="#" class="btn btn-outline-danger w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custom Navigation -->
+            <div class="carousel-controls">
+                <div class="carousel-control control-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="carousel-control control-next">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hero Carousel
+        const heroSwiper = new Swiper('.hero-swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            speed: 1000
+        });
+        
+        // Products Carousel
+        const productsSwiper = new Swiper('.products-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.control-next',
+                prevEl: '.control-prev'
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 2
+                },
+                992: {
+                    slidesPerView: 3
+                },
+                1200: {
+                    slidesPerView: 4
+                }
+            },
+            grabCursor: true
+        });
+        
+        // Add to cart animation
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show +1 animation
+                const buttonRect = this.getBoundingClientRect();
+                const plusOne = document.createElement('div');
+                plusOne.className = 'add-to-cart-anim';
+                plusOne.textContent = '+1';
+                plusOne.style.left = `${buttonRect.left + buttonRect.width/2}px`;
+                plusOne.style.top = `${buttonRect.top}px`;
+                document.body.appendChild(plusOne);
+                
+                setTimeout(() => {
+                    plusOne.remove();
+                }, 1000);
+            });
+        });
+    });
+</script>
+{% endblock %} 

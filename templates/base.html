@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Alfa Mall{% endblock %}</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Swiper Carousel CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Animate.css for micro-animations -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <!-- Bootstrap CSS -->    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">    <!-- Swiper Carousel CSS -->    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />    <!-- Animate.css for micro-animations -->    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />    <!-- Font Awesome Icons -->    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />    <!-- Google Fonts - Inter -->    <link rel="preconnect" href="https://fonts.googleapis.com">    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
         :root {
@@ -19,11 +20,23 @@
             --accent-color: #990000;
             --text-light: #ffffff;
             --text-dark: #333333;
+            --gray-light: #f8f9fa;
+            --gray-medium: #e9ecef;
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #fff;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+        }
+
+        section {
+            padding: 1.5rem 0;
         }
 
         .bg-alfa-primary {
@@ -38,75 +51,213 @@
             color: var(--primary-color) !important;
         }
 
+        .btn {
+            border-radius: 6px;
+            transition: transform 150ms ease, box-shadow 150ms ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
         .btn-alfa {
-            background: linear-gradient(90deg, #e60000 60%, #ff3333 100%);
+            background: var(--primary-color);
             color: var(--text-light);
             border: none;
-            transition: box-shadow 0.2s, transform 0.2s;
-            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.1);
         }
 
         .btn-alfa:hover,
         .btn-alfa:focus {
-            background: linear-gradient(90deg, #ff3333 60%, #e60000 100%);
+            background: var(--secondary-color);
             color: #fff;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(230, 0, 0, 0.15);
+            box-shadow: 0 6px 12px rgba(230, 0, 0, 0.2);
         }
 
+        /* Header/Navbar Styles */
         .navbar {
-            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.06);
-            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
         }
 
         .navbar-brand {
             display: flex;
             align-items: center;
-            font-weight: bold;
-            font-size: 1.7rem;
-            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
         }
 
-        .navbar-brand svg {
-            height: 36px;
-            margin-right: 10px;
+        .navbar-brand img {
+            height: 40px;
         }
 
-        .nav-link,
-        .dropdown-item {
-            transition: color 0.2s, background 0.2s;
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: color 0.2s;
         }
 
-        .nav-link.active,
-        .dropdown-item.active {
-            color: #fff !important;
-            background: var(--accent-color) !important;
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 200ms ease, left 200ms ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 80%;
+            left: 10%;
         }
 
         .nav-link:hover,
-        .dropdown-item:hover {
-            color: #fff !important;
-            background: var(--primary-color) !important;
+        .nav-link.active {
+            color: var(--primary-color) !important;
         }
 
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1.25rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(230, 0, 0, 0.05);
+            color: var(--primary-color) !important;
+        }
+
+        .dropdown-item.active {
+            background-color: var(--primary-color);
+            color: #fff !important;
+        }
+
+        /* Search bar */
+        .search-form {
+            position: relative;
+        }
+
+        .search-input {
+            border-radius: 50px;
+            padding-left: 2.5rem;
+            padding-right: 1rem;
+            border: 1px solid #e0e0e0;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .search-button {
+            border-radius: 50px;
+            padding: 0.375rem 1rem;
+        }
+
+        /* Header Icons */
+        .header-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            background-color: rgba(230, 0, 0, 0.1);
+            color: var(--primary-color);
+            transition: background-color 0.3s, transform 0.3s;
+            padding: 0 15px;
+            text-decoration: none;
+        }
+
+        .header-icon:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(230, 0, 0, 0.7);
+            }
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 5px rgba(230, 0, 0, 0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Product Card Styles */
         .product-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-            height: 100%;
-            border-radius: 18px;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
             overflow: hidden;
+            transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+            height: 100%;
         }
 
         .product-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 12px 32px rgba(230, 0, 0, 0.13);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: rgba(230, 0, 0, 0.1);
         }
 
-        .card-img-top {
-            height: 210px;
+        .product-card .card-img-top {
+            height: 200px;
             object-fit: contain;
-            padding: 10px;
             background: #fff;
-            border-bottom: 1px solid #f3f3f3;
+            padding: 1rem;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .product-card .card-body {
+            padding: 1.25rem;
         }
 
         .product-title {
@@ -115,76 +266,190 @@
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            font-weight: 500;
         }
 
-        .badge-animated {
-            animation: bounceIn 1s;
-        }
-
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-
-            60% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .swiper {
-            width: 100%;
-            padding-bottom: 32px;
-        }
-
-        .swiper-slide {
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 600;
             color: var(--primary-color);
         }
 
-        .swiper-pagination-bullet-active {
-            background: var(--primary-color);
+        .product-card .quick-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: opacity 0.4s, transform 0.4s;
         }
 
-        .animated-cta {
-            animation: pulse 1.5s infinite;
+        .product-card:hover .quick-actions {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(230, 0, 0, 0.3);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(230, 0, 0, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(230, 0, 0, 0);
-            }
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
         }
 
-        .lottie-anim {
-            width: 48px;
-            height: 48px;
+        .action-icon:hover {
+            transform: scale(1.15);
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(45deg, #990000, #e60000);
+            color: var(--text-light);
+            padding: 3rem 0 0;
+        }
+
+        footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.2s, transform 0.2s;
             display: inline-block;
         }
 
-        footer {
-            background: linear-gradient(90deg, #e60000 60%, #ff3333 100%);
-            color: var(--text-light);
-            padding: 30px 0;
+        footer a:hover {
+            color: white;
+            transform: translateX(3px);
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .footer-copyright {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Image Lazy Load Animation */
+        .lazy-load {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .lazy-load.loaded {
+            opacity: 1;
+        }
+
+        /* Add to Cart Animation */
+        .add-to-cart-anim {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            font-weight: 600;
+            color: var(--primary-color);
+            animation: flyToCart 1s ease-out forwards;
+        }
+
+        @keyframes flyToCart {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            70% {
+                opacity: 0.7;
+                transform: scale(1.2) translateY(-20px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-50px) translateX(50px);
+            }
+        }
+        
+        /* Dropdown enhancements */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            padding: 0.75rem 0;
+            margin-top: 10px;
+            animation: fadeInUp 0.25s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(230, 0, 0, 0.05);
+            padding-left: 1.75rem;
+        }
+        
+        .dropdown-item.active {
+            background-color: var(--primary-color);
+        }
+        
+        /* Navigation animations */
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-2px);
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -193,14 +458,11 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-alfa-primary sticky-top animate__animated animate__fadeInDown">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:home' %}">
-                <!-- Alfa Mall SVG Logo Placeholder -->
-                 <!-- alfamall_logo svg is in static folder -->
-                 <img src="{% static 'alfamall-logo-trans.png' %}" alt="Alfa Mall Logo" style="height: 70px; margin-right: 100px;">
-                 <!--  this image should show in white background -->
-                </a>
+                <img src="{% static 'alfamall-logo.svg' %}" alt="Alfa Mall Logo" class="lazy-load">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -208,154 +470,224 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Categories
+                            <i class="fas fa-th-large me-1"></i> Categories
                         </a>
                         <ul class="dropdown-menu">
                             {% for category in categories %}
-                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">
+                                {% if category.name|lower == 'accessories' %}
+                                    <i class="fas fa-headphones me-2"></i>
+                                {% elif category.name|lower == 'electronics' %}
+                                    <i class="fas fa-microchip me-2"></i>
+                                {% elif 'gaming' in category.name|lower or 'laptop' in category.name|lower %}
+                                    <i class="fas fa-gamepad me-2"></i>
+                                {% elif 'tv' in category.name|lower %}
+                                    <i class="fas fa-tv me-2"></i>
+                                {% elif 'mobile' in category.name|lower or 'phone' in category.name|lower or 'tablet' in category.name|lower %}
+                                    <i class="fas fa-mobile-alt me-2"></i>
+                                {% elif 'watch' in category.name|lower %}
+                                    <i class="fas fa-clock me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-box me-2"></i>
+                                {% endif %}
+                                {{ category.name }}
+                            </a></li>
                             {% endfor %}
-                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}">All Products</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}"><i class="fas fa-th me-2"></i> All Products</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:about' %}">About</a>
+                        <a class="nav-link" href="{% url 'core:about' %}"><i class="fas fa-info-circle me-1"></i> About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
+                        <a class="nav-link" href="{% url 'core:contact' %}"><i class="fas fa-envelope me-1"></i> Contact</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle bold" href="#" role="button" data-bs-toggle="dropdown">
-                            Recommendations
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-lightbulb me-1"></i> Recommendations
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'recommendations:explore' %}">Explore All</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:explore' %}"><i class="fas fa-compass me-2"></i> Explore All</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="{% url 'recommendations:user_recommendations' %}">For
-                                    You</a></li>
-                            <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}">Popular
-                                    Items</a></li>
-                            <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}">Latest
-                                    Items</a></li>
-                            <li><a class="dropdown-item" href="{% url 'recommendations:user_neighbors' %}">Similar Users</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:user_recommendations' %}"><i class="fas fa-thumbs-up me-2"></i> For You</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:popular_items' %}"><i class="fas fa-fire me-2"></i> Popular Items</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:latest_items' %}"><i class="fas fa-clock me-2"></i> Latest Items</a></li>
+                            <li><a class="dropdown-item" href="{% url 'recommendations:user_neighbors' %}"><i class="fas fa-users me-2"></i> Similar Users</a></li>
                         </ul>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
-                    <form class="d-flex me-2" action="{% url 'products:product_list' %}" method="get">
-                        <input class="form-control me-2" type="search" name="search" placeholder="Search"
-                            aria-label="Search">
-                        <button class="btn btn-outline-light" type="submit">Search</button>
+                    <form class="search-form d-flex me-3" action="{% url 'products:product_list' %}" method="get">
+                        <!-- <span class="search-icon">
+                            <i class="fas fa-search"></i>
+                        </span> -->
+                        <input class="form-control search-input me-2" type="search" name="search" placeholder="Search products..." aria-label="Search">
+                        <button class="btn btn-alfa search-button" type="submit">Search</button>
                     </form>
-                    <div class="dropdown me-2">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
-                            data-bs-toggle="dropdown">
-                            <i class="bi bi-person"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            {% if request.user.is_authenticated %}
-                            <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'users:orders' %}">My Orders</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
-                            {% else %}
-                            <li><a class="dropdown-item" href="{% url 'users:login' %}">Login</a></li>
-                            <li><a class="dropdown-item" href="{% url 'users:register' %}">Register</a></li>
+                    
+                    <div class="d-flex gap-3">
+                        <div class="dropdown">
+                            <a href="#" class="header-icon d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>
+                                {% if request.user.is_authenticated %}
+                                <span class="d-none d-md-inline">{{ request.user.username }}</span>
+                                {% else %}
+                                <span class="d-none d-md-inline">Account</span>
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                {% if request.user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="fas fa-user-circle me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:orders' %}"><i class="fas fa-box me-2"></i> My Orders</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i> Wishlist</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt me-2"></i> Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:register' %}"><i class="fas fa-user-plus me-2"></i> Register</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        
+                        <a href="{% url 'cart:cart_detail' %}" class="header-icon cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% if cart|length > 0 %}
+                            <span class="cart-badge">{{ cart|length }}</span>
                             {% endif %}
-                        </ul>
+                        </a>
                     </div>
-                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative">
-                        <i class="bi bi-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-animated">
-                            {{ cart|length }}
-                        </span>
-                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="py-5 animate__animated animate__fadeInUp">
+    <main class="animate__animated animate__fadeInUp">
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-alfa-primary text-light animate__animated animate__fadeInUp animate__delay-1s">
-        <div class="container py-4">
+    <footer>
+        <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <img src="{% static 'alfamall-logo-trans.png' %}" alt="Alfa Mall Logo" style="height: 120px; margin-right: 150px;">
-<!-- 
-                    <h5 class="text-uppercase">Alfa Mall</h5> -->
-                    <!-- <p class="small">
-                        Your one-stop shop for electronics, fashion, and more.
-                    </p> -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <img src="{% static 'alfamall-logo-trans.png' %}" alt="Alfa Mall Logo" class="mb-4 lazy-load" style="height: 70px;">
+                    <p class="mb-3 pe-lg-4">Your one-stop shop for electronics, fashion, and more at unbeatable prices.</p>
+                    <div class="mt-4 social-icons">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Quick Links</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-1">
-                            <a href="{% url 'core:home' %}" class="text-light text-decoration-none">Home</a>
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="{% url 'core:home' %}" class="text-decoration-none"><i class="fas fa-home me-2"></i> Home</a>
                         </li>
-                        <li class="mb-1">
-                            <a href="{% url 'products:product_list' %}"
-                                class="text-light text-decoration-none">Products</a>
+                        <li class="mb-2">
+                            <a href="{% url 'products:product_list' %}" class="text-decoration-none"><i class="fas fa-box me-2"></i> Products</a>
                         </li>
-                        <li class="mb-1">
-                            <a href="{% url 'core:about' %}" class="text-light text-decoration-none">About Us</a>
+                        <li class="mb-2">
+                            <a href="{% url 'core:about' %}" class="text-decoration-none"><i class="fas fa-info-circle me-2"></i> About Us</a>
                         </li>
-                        <li class="mb-1">
-                            <a href="{% url 'core:contact' %}" class="text-light text-decoration-none">Contact</a>
+                        <li class="mb-2">
+                            <a href="{% url 'core:contact' %}" class="text-decoration-none"><i class="fas fa-envelope me-2"></i> Contact</a>
                         </li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Categories</h5>
-                    <ul class="list-unstyled mb-0">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>Categories</h5>
+                    <ul class="list-unstyled">
                         {% for category in categories %}
-                        <li class="mb-1">
-                            <a href="{{ category.get_absolute_url }}" class="text-light text-decoration-none">
+                        <li class="mb-2">
+                            <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
+                                {% if category.name|lower == 'accessories' %}
+                                    <i class="fas fa-headphones me-2"></i>
+                                {% elif category.name|lower == 'electronics' %}
+                                    <i class="fas fa-microchip me-2"></i>
+                                {% elif 'gaming' in category.name|lower or 'laptop' in category.name|lower %}
+                                    <i class="fas fa-gamepad me-2"></i>
+                                {% elif 'tv' in category.name|lower %}
+                                    <i class="fas fa-tv me-2"></i>
+                                {% elif 'mobile' in category.name|lower or 'phone' in category.name|lower or 'tablet' in category.name|lower %}
+                                    <i class="fas fa-mobile-alt me-2"></i>
+                                {% elif 'watch' in category.name|lower %}
+                                    <i class="fas fa-clock me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-box me-2"></i>
+                                {% endif %}
                                 {{ category.name }}
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Contact Us</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2">
-                            <i class="bi bi-geo-alt"></i> 123 Main Street, City, Country
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-map-marker-alt me-2"></i> 123 Main Street, City, Country
                         </li>
-                        <li class="mb-2">
-                            <i class="bi bi-envelope"></i> info@alfamall.com
+                        <li class="mb-3">
+                            <i class="fas fa-envelope me-2"></i> info@alfamall.com
                         </li>
-                        <li class="mb-2">
-                            <i class="bi bi-phone"></i> +1 234 567 890
+                        <li class="mb-3">
+                            <i class="fas fa-phone me-2"></i> +1 234 567 890
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-clock me-2"></i> 24/7 Customer Support
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="text-center p-3" style="background-color: var(--accent-color);">
+        <div class="footer-copyright text-center">
             © 2025 Alfa Mall. All rights reserved.
         </div>
     </footer>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Swiper Carousel JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- Lottie Animation JS (for micro-animations) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    
+    <script>
+        // Lazy loading images
+        document.addEventListener('DOMContentLoaded', function() {
+            const lazyImages = document.querySelectorAll('.lazy-load');
+            lazyImages.forEach(img => {
+                img.classList.add('loaded');
+            });
+            
+            // Add to cart animation
+            document.body.addEventListener('click', function(e) {
+                if (e.target.closest('.add-to-cart')) {
+                    const button = e.target.closest('.add-to-cart');
+                    const rect = button.getBoundingClientRect();
+                    const plusOne = document.createElement('div');
+                    plusOne.className = 'add-to-cart-anim';
+                    plusOne.textContent = '+1';
+                    plusOne.style.left = `${rect.left + rect.width/2}px`;
+                    plusOne.style.top = `${rect.top}px`;
+                    document.body.appendChild(plusOne);
+                    
+                    setTimeout(() => {
+                        plusOne.remove();
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 

@@ -16,10 +16,14 @@ class UserProfile(models.Model):
     def get_random_interests(self):
         """Generate random interests for demo purposes"""
         possible_interests = [
-          "led tv", "electronics", "digital goods", "hunarmand", "kitchen items", "fans", 
-            "bikes", "mobiles", "travel", "washing machines", "online subscription", "reading",
-            "clothing", "entertainment", "outdoors", "fashion"
+          "led tv", "electronics", "Apple", "washing machine", "kitchen items", "samsung", 
+            "laptops", "mobiles", "travel", "watches", "air conditioner AC"
         ]
+        # possible_interests = [
+        #   "led tv", "electronics", "digital goods", "hunarmand", "kitchen items", "fans", 
+        #     "bikes", "mobiles", "travel", "washing machines", "online subscription", "reading",
+        #     "clothing", "entertainment", "outdoors", "fashion"
+        # ]
         return random.sample(possible_interests, random.randint(2, 5))
 
 @receiver(post_save, sender=User)

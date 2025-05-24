@@ -2,39 +2,327 @@
 
 {% block title %}Contact Us - Alfa Mall{% endblock %}
 
+{% block extra_css %}
+<style>
+    .contact-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 4rem 0;
+    }
+    
+    .contact-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .contact-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+    
+    .contact-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .contact-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        background: white;
+        height: 100%;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .contact-info {
+        padding: 2rem;
+    }
+    
+    .contact-info-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(230, 0, 0, 0.1);
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        margin-right: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .contact-card:hover .contact-icon {
+        background-color: var(--primary-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .contact-text h5 {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .contact-text p {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+    
+    .contact-form {
+        padding: 2rem;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+    }
+    
+    .form-control {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: none;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+    }
+    
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .btn-contact {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        border: none;
+        color: white;
+        box-shadow: 0 5px 15px rgba(230, 0, 0, 0.2);
+        transition: all 0.3s;
+    }
+    
+    .btn-contact:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(230, 0, 0, 0.3);
+    }
+    
+    .btn-contact:active {
+        transform: translateY(0);
+    }
+    
+    .input-icon {
+        position: relative;
+    }
+    
+    .input-icon i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        transition: color 0.3s;
+    }
+    
+    .input-icon input, .input-icon textarea {
+        padding-left: 45px;
+    }
+    
+    .input-icon textarea {
+        padding-top: 1rem;
+    }
+    
+    .input-icon i.textarea-icon {
+        top: 1.25rem;
+    }
+    
+    .input-icon input:focus + i, .input-icon textarea:focus + i {
+        color: var(--primary-color);
+    }
+    
+    .map-container {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-top: 3rem;
+        height: 400px;
+    }
+    
+    .contact-social {
+        display: flex;
+        margin-top: 1.5rem;
+    }
+    
+    .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #f5f5f5;
+        color: #666;
+        margin-right: 0.75rem;
+        transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="text-alfa mb-4">Contact Us</h1>
-    
-    <p class="lead">We'd love to hear from you! Whether you have questions, feedback, or need assistance, our team is here to help.</p>
-    
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <h5>Get in Touch</h5>
-            <ul class="list-unstyled">
-                <li><i class="bi bi-geo-alt"></i> 123 Main Street, City, Country</li>
-                <li><i class="bi bi-envelope"></i> info@alfamall.com</li>
-                <li><i class="bi bi-phone"></i> +1 234 567 890</li>
-            </ul>
+<div class="contact-container">
+    <div class="container">
+        <div class="contact-header">
+            <h1 class="contact-title">Get in Touch</h1>
+            <p class="contact-subtitle">We'd love to hear from you! Whether you have questions, feedback, or need assistance, our team is here to help.</p>
         </div>
-        <div class="col-md-6">
-            <h5>Send us a Message</h5>
-            <form action="#" method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="name" class="form-label">Your Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+        
+        <div class="row">
+            <!-- Contact Information -->
+            <div class="col-lg-5 mb-4">
+                <div class="contact-card">
+                    <div class="contact-info">
+                        <h4 class="contact-info-title"><i class="fas fa-address-card me-2"></i> Contact Information</h4>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h5>Our Location</h5>
+                                <p>123 Main Street, City, Country</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h5>Email Us</h5>
+                                <p>info@alfamall.com</p>
+                                <p>support@alfamall.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h5>Call Us</h5>
+                                <p>+1 234 567 890</p>
+                                <p>+1 987 654 321</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h5>Working Hours</h5>
+                                <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                                <p>Weekend: 10:00 AM - 3:00 PM</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-social">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Your Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="col-lg-7 mb-4">
+                <div class="contact-card">
+                    <div class="contact-form">
+                        <h4 class="form-title"><i class="fas fa-paper-plane me-2"></i> Send us a Message</h4>
+                        
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <div class="input-icon mb-3">
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Your Email</label>
+                                    <div class="input-icon mb-3">
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <div class="input-icon mb-3">
+                                    <input type="text" class="form-control" id="subject" name="subject">
+                                    <i class="fas fa-tag"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="message" class="form-label">Message</label>
+                                <div class="input-icon mb-3">
+                                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                    <i class="fas fa-comment-dots textarea-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-contact">
+                                <i class="fas fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-alfa">Send Message</button>
-            </form>
+            </div>
+        </div>
+        
+        <!-- Map -->
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.03606326337!2d-74.25987368715491!3d40.69767006766623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1622648215248!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </div>
 </div>

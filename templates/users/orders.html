@@ -2,48 +2,475 @@
 
 {% block title %}My Orders | Alfa Mall{% endblock %}
 
+{% block extra_css %}
+{% load static %}
+
+<style>
+    .profile-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 3rem 0;
+        min-height: 80vh;
+    }
+    
+    .profile-sidebar {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        background: white;
+    }
+    
+    .profile-sidebar:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1rem;
+    }
+    
+    .profile-avatar i {
+        font-size: 5rem;
+        color: white;
+    }
+    
+    .profile-name {
+        color: white;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .profile-email {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.875rem;
+    }
+    
+    .profile-menu {
+        padding: 1.5rem 0;
+    }
+    
+    .menu-item {
+        position: relative;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        align-items: center;
+        color: #666;
+        transition: all 0.2s;
+        text-decoration: none;
+        border-left: 3px solid transparent;
+    }
+    
+    .menu-item i {
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        width: 25px;
+        text-align: center;
+    }
+    
+    .menu-item:hover {
+        background-color: rgba(230, 0, 0, 0.05);
+        color: var(--primary-color);
+    }
+    
+    .menu-item.active {
+        background-color: rgba(230, 0, 0, 0.05);
+        color: var(--primary-color);
+        border-left: 3px solid var(--primary-color);
+    }
+    
+    .logout-item {
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        align-items: center;
+        color: #666;
+        transition: all 0.2s;
+        border-top: 1px solid #eee;
+        margin-top: 1rem;
+    }
+    
+    .logout-item i {
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        width: 25px;
+        text-align: center;
+    }
+    
+    .logout-item:hover {
+        color: var(--primary-color);
+    }
+    
+    .orders-main {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        background: white;
+        height: 100%;
+    }
+    
+    .orders-main:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .orders-main-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .orders-main-header h4 {
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+    
+    .orders-main-body {
+        padding: 1.5rem;
+    }
+    
+    .orders-tab {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tab-item {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        color: #666;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+    }
+    
+    .tab-item:hover {
+        color: var(--primary-color);
+    }
+    
+    .tab-item.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+    }
+    
+    .order-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s;
+    }
+    
+    .order-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transform: translateY(-5px);
+    }
+    
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .order-id {
+        font-weight: 600;
+    }
+    
+    .order-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-delivered {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .status-processing {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+    
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .order-details {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+    
+    .order-detail {
+        margin-right: 2rem;
+    }
+    
+    .order-detail:last-child {
+        margin-right: 0;
+    }
+    
+    .detail-label {
+        color: #666;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .detail-value {
+        font-weight: 500;
+    }
+    
+    .order-products {
+        margin-bottom: 1rem;
+    }
+    
+    .order-product {
+        display: flex;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .order-product:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .product-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        margin-right: 1rem;
+        overflow: hidden;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    
+    .product-details {
+        flex: 1;
+    }
+    
+    .product-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    
+    .product-meta {
+        display: flex;
+        font-size: 0.875rem;
+        color: #666;
+    }
+    
+    .product-price {
+        margin-right: 1rem;
+    }
+    
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+    
+    .order-total {
+        font-weight: 600;
+    }
+    
+    .order-actions a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        background-color: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-left: 0.5rem;
+        transition: all 0.2s;
+    }
+    
+    .order-actions a:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+    
+    .empty-orders {
+        text-align: center;
+        padding: 3rem 0;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-shop {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        border: none;
+        color: white;
+        box-shadow: 0 5px 15px rgba(230, 0, 0, 0.2);
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+        margin-top: 1.5rem;
+    }
+    
+    .btn-shop:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(230, 0, 0, 0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-alfa-primary text-white">
-                    <h4 class="mb-0">Profile</h4>
-                </div>
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <i class="bi bi-person-circle" style="font-size: 5rem;"></i>
+<div class="profile-container">
+    <div class="container">
+        <div class="row">
+            <!-- Profile Sidebar -->
+            <div class="col-lg-4 mb-4">
+                <div class="profile-sidebar">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h5 class="profile-name">{{ request.user.username }}</h5>
+                        <p class="profile-email">{{ request.user.email }}</p>
                     </div>
-                    <h5>{{ request.user.username }}</h5>
-                    <p class="text-muted">{{ request.user.email }}</p>
+                    
+                    <div class="profile-menu">
+                        <a href="{% url 'users:profile' %}" class="menu-item">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="{% url 'users:orders' %}" class="menu-item active">
+                            <i class="fas fa-box"></i> My Orders
+                        </a>
+                        <a href="#" class="menu-item">
+                            <i class="fas fa-heart"></i> Wishlist
+                        </a>
+                        <a href="#" class="menu-item">
+                            <i class="fas fa-map-marker-alt"></i> Addresses
+                        </a>
+                        <a href="#" class="menu-item">
+                            <i class="fas fa-bell"></i> Notifications
+                        </a>
+                        <a href="#" class="menu-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        
+                        <a href="{% url 'users:logout' %}" class="logout-item">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
                 </div>
             </div>
             
-            <div class="list-group">
-                <a href="{% url 'users:profile' %}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-person me-2"></i> My Profile
-                </a>
-                <a href="{% url 'users:orders' %}" class="list-group-item list-group-item-action active bg-alfa-primary">
-                    <i class="bi bi-box me-2"></i> My Orders
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="bi bi-heart me-2"></i> Wishlist
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="bi bi-gear me-2"></i> Settings
-                </a>
-            </div>
-        </div>
-        
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-alfa-primary text-white">
-                    <h4 class="mb-0">Order History</h4>
-                </div>
-                <div class="card-body">
-                    <!-- Display orders here -->
-                    <div class="alert alert-info">
-                        <p>No orders yet. <a href="{% url 'products:product_list' %}" class="text-alfa">Start shopping!</a></p>
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <div class="orders-main">
+                    <div class="orders-main-header">
+                        <h4><i class="fas fa-shopping-bag me-2"></i> My Orders</h4>
+                        <span class="badge bg-primary">0 Orders <i class="fas fa-box ms-1"></i></span>
+                    </div>
+                    
+                    <div class="orders-main-body">
+                        <div class="orders-tab">
+                            <div class="tab-item active">All</div>
+                            <div class="tab-item">Processing</div>
+                            <div class="tab-item">Delivered</div>
+                            <div class="tab-item">Cancelled</div>
+                        </div>
+                        
+                        <!-- Empty state for orders -->
+                        <div class="empty-orders">
+                            <div class="empty-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4>No Orders Yet</h4>
+                            <p class="text-muted">Looks like you haven't placed any orders yet.</p>
+                            <a href="{% url 'products:product_list' %}" class="btn-shop">
+                                <i class="fas fa-shopping-cart me-2"></i> Start Shopping
+                            </a>
+                        </div>
+                        
+                        <!-- Sample order - this would be shown when the user has orders -->
+                        <div class="order-card" style="display: none;">
+                            <div class="order-header">
+                                <div class="order-id">Order #12345</div>
+                                <div class="order-status status-delivered">
+                                    <i class="fas fa-check-circle me-1"></i> Delivered
+                                </div>
+                            </div>
+                            
+                            <div class="order-details">
+                                <div class="order-detail">
+                                    <div class="detail-label">Order Date</div>
+                                    <div class="detail-value">May 15, 2025</div>
+                                </div>
+                                <div class="order-detail">
+                                    <div class="detail-label">Delivery Date</div>
+                                    <div class="detail-value">May 18, 2025</div>
+                                </div>
+                                <div class="order-detail">
+                                    <div class="detail-label">Payment</div>
+                                    <div class="detail-value">Credit Card</div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-products">
+                                <div class="order-product">
+                                    <div class="product-image">
+                                        <img src="{% static 'alfamall-logo.png' %}" alt="Product">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-name">iPhone 16 Pro Max 256GB</div>
+                                        <div class="product-meta">
+                                            <div class="product-price">$1,099.00</div>
+                                            <div class="product-quantity">Qty: 1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-footer">
+                                <div class="order-total">Total: $1,099.00</div>
+                                <div class="order-actions">
+                                    <a href="#"><i class="fas fa-eye me-1"></i> View Details</a>
+                                    <a href="#"><i class="fas fa-redo me-1"></i> Buy Again</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

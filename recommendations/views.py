@@ -418,3 +418,46 @@ def api_session_recommend_by_category(request, category):
     except Exception as e:
         logger.error(f"Error in category session recommend API: {e}")
         return JsonResponse({'error': str(e)}, status=500)
+
+def api_user_recommendations(request, user_id):
+    """API endpoint to get recommendations for a user with full product details"""
+    gorse_client = GorseClient()
+    try:
+        # Get recommended item IDs from Gorse without expanding
+        recommended_item_ids = gorse_client.get_recommend_item_ids(user_id, n=12)
+        
+        # Convert to list of strings if we got any other format
+        item_ids = []
+        for item in recommended_item_ids:
+            if isinstance(item, dict) and 'Id' in item:
+                item_ids.append(item['Id'])
+            elif isinstance(item, str):
+                item_ids.append(item)
+        
+        logger.info(f"Fetched recommendation IDs for user {user_id}: {item_ids}")
+        
+        # Get the actual products from the database
+        products_dict = {}
+        if item_ids:
+            products = Product.objects.filter(gorse_item_id__in=item_ids)
+            products_dict = {product.gorse_item_id: product for product in products}
+        
+        # Build response with product details in the same order as recommendations
+        product_details = []
+        for item_id in item_ids:
+            if item_id in products_dict:
+                product = products_dict[item_id]
+                product_details.append({
+                    'id': product.id,
+                    'name': product.name,
+                    'url': product.get_absolute_url(),
+                    'image': product.image.url if product.image else '',
+                    'price': str(product.price),
+                    'original_price': str(product.original_price) if product.original_price else str(product.price),
+                    'category': product.category.name
+                })
+        
+        return JsonResponse(product_details, safe=False)
+    except Exception as e:
+        logger.error(f"Error fetching recommendations for user {user_id}: {e}")
+        return JsonResponse({'error': str(e)}, status=500)

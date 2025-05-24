@@ -19,4 +19,7 @@ urlpatterns = [
     path('similar-users/', views.user_neighbors, name='user_neighbors'),
     path('api/session/recommend/', views.api_session_recommend, name='api_session_recommend'),
     path('api/session/recommend/<str:category>/', views.api_session_recommend_by_category, name='api_session_recommend_by_category'),
+    
+    # API to get user recommendations with product details
+    path('api/user/<str:user_id>/recommendations/', views.api_user_recommendations, name='api_user_recommendations'),
 ]

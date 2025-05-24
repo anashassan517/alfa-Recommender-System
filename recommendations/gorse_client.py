@@ -207,3 +207,23 @@ class GorseClient:
         except Exception as e:
             logger.error(f"Error getting user neighbors: {e}")
             return []
+
+    def get_recommend_item_ids(self, user_id, category='', n=10, offset=0):
+        """Get only the recommendation IDs for a user without expanding to full details"""
+        endpoint = f"/api/recommend/{user_id}"
+        if category:
+            endpoint = f"/api/recommend/{user_id}/{category}"
+        
+        url = f"{self.base_url}{endpoint}"
+        params = {'n': n, 'offset': offset}
+        
+        try:
+            response = requests.get(url, headers=self.headers, params=params)
+            response.raise_for_status()
+            items = self._log_response(endpoint, response.json(), params)
+            
+            # Return the item IDs directly
+            return items
+        except Exception as e:
+            logger.error(f"Error fetching recommendation IDs from {endpoint}: {e}")
+            return []

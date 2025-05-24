@@ -4,233 +4,564 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Banner Carousel -->
-<section class="pb-0">
+<!-- Hero Carousel -->
+<section class="hero-section">
     <div class="container-fluid px-0">
         <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <div class="position-relative bg-alfa-primary text-white" style="min-height:340px;">
-                        <!-- <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/budgeted-phones-50k.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="Offer 1"> -->
-                        <!-- <img src="https://cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="w-100 h-100 object-fit-cover opacity-0.2" style="min-height:340px;max-height:420px;object-fit:cover;" alt="alfa maLL Logo"> -->
-                        <img src="{% static 'alfamall-logo.png' %}" alt="Alfa Mall Logo" class="w-100 h-100 object-fit-cover opacity-0.2" style="min-height:340px;max-height:420px;object-fit:cover;" >
-                        <div class="position-absolute top-50 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
-                            <h1 class="display-4 fw-bold mb-3">Welcome to Alfa Mall</h1>
-                            <p class="lead mb-4">Discover the best deals on electronics, fashion, mobiles, bikes, and accessories.</p>
-                            <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg px-4 animated-cta">Shop Now <i class="bi bi-arrow-right"></i></a>
+                    <div class="position-relative hero-slide">
+                        <img src="{% static 'alfamall-logo-can.png' %}" alt="Alfa Mall Logo" class="hero-bg-image">
+                        <div class="hero-content">
+                            <h1 class="hero-title">Welcome to Alfa Mall</h1>
+                            <p class="hero-subtitle">Discover the best deals on electronics, fashion, and more</p>
+                            <a href="{% url 'products:product_list' %}" class="btn btn-shop-now">Shop Now <i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="position-relative bg-alfa-secondary text-white" style="min-height:340px;">
-                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/xiaomilarge2025.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="Offer 2">
-                        <div class="position-absolute top-55 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
-                            <!-- <h1 class="display-4 fw-bold mb-3">Seasonal Sale is Live!</h1>
-                            <p class="lead mb-4">Up to <span class="fw-bold">50% OFF</span> on select categories. Limited time only.</p> -->
-                            <a href="{% url 'products:product_list' %}?sale=seasonal" class="btn btn-light btn-lg px-4 animated-cta">Explore Offers <i class="bi bi-fire"></i></a>
+                    <div class="position-relative hero-slide">
+                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/xiaomilarge2025.jpg" class="hero-bg-image" alt="Offer 2">
+                        <div class="hero-content p-10">
+                            <!-- <h1 class="hero-title">Seasonal Sale is Live!</h1>
+                            <p class="hero-subtitle">Up to <span class="fw-bold">50% OFF</span> on select categories</p> -->
+                            <a href="{% url 'products:product_list' %}?sale=seasonal" class="btn btn-shop-now">Explore Offers <i class="fas fa-fire"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="position-relative bg-alfa-primary text-white" style="min-height:340px;">
-                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/iphone16series.jpg" class="w-100 h-100 object-fit-cover opacity-1" style="min-height:340px;max-height:420px;object-fit:cover;" alt="New Arrivals">
-                        <div class="position-absolute top-50 start-0 translate-middle-y ps-5 animate__animated animate__fadeInLeft" style="z-index:2;">
-                            <!-- <h1 class="display-4 fw-bold mb-3">New Arrivals</h1> -->
-                            <!-- <p class="lead mb-4">Check out the latest products curated just for you.</p> -->
-                            <a href="{% url 'recommendations:latest_items' %}" class="btn btn-light btn-lg px-4 animated-cta">See New Arrivals <i class="bi bi-stars"></i></a>
+                    <div class="position-relative hero-slide">
+                        <img src="https://alfa-cdn.comverseglobal.com/alfa/products/product_images/iphone16series.jpg" class="hero-bg-image" alt="New Arrivals">
+                        <div class="hero-content">
+                            <h1 class="hero-title">New Arrivals</h1>
+                            <p class="hero-subtitle">Check out the latest products curated just for you</p>
+                            <a href="{% url 'recommendations:latest_items' %}" class="btn btn-shop-now">See New Arrivals <i class="fas fa-star"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination hero-pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title"><i class="fas fa-th text-alfa me-2"></i>Shop by Category</h2>
+        <div class="categories-grid">
+            {% for category in categories|slice:":6" %}
+            <div class="category-card">
+                <div class="category-icon-wrapper">
+                    {% if category.name|lower == 'accessories' %}
+                        <i class="fas fa-headphones category-icon"></i>
+                    {% elif category.name|lower == 'electronics' %}
+                        <i class="fas fa-microchip category-icon"></i>
+                    {% elif category.name|lower == 'gaming & laptops' %}
+                        <i class="fas fa-gamepad category-icon"></i>
+                    {% elif category.name|lower == 'led tv' %}
+                        <i class="fas fa-tv category-icon"></i>
+                    {% elif category.name|lower == 'mobile phones & tablets' %}
+                        <i class="fas fa-mobile-alt category-icon"></i>
+                    {% elif category.name|lower == 'watches' %}
+                        <i class="fas fa-clock category-icon"></i>
+                    {% else %}
+                        <i class="fas fa-box category-icon"></i>
+                    {% endif %}
+                </div>
+                <h5 class="category-title">{{ category.name }}</h5>
+                <a href="{{ category.get_absolute_url }}" class="category-link">Browse Now</a>
+                <div class="category-overlay"></div>
+            </div>
+            {% empty %}
+            <div class="empty-categories">
+                <p>No categories available at the moment.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
 <!-- Featured Products Carousel -->
-<section class="py-5">
+<section class="featured-section">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0"><i class="bi bi-star-fill text-alfa me-2"></i>Featured Products</h2>
-            <a href="{% url 'products:product_list' %}" class="btn btn-outline-danger">Browse All <i class="bi bi-arrow-right"></i></a>
+            <h2 class="section-title"><i class="fas fa-fire text-alfa me-2"></i>Featured Products</h2>
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-danger btn-view-all">View All <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="swiper featured-swiper">
             <div class="swiper-wrapper">
                 {% for product in featured_products|slice:":8" %}
                 <div class="swiper-slide">
-                    <div class="card h-100 product-card animate__animated animate__fadeInUp">
+                    <div class="product-card">
+                        <div class="product-image-wrapper">
                         <a href="{{ product.get_absolute_url }}">
                             {% if product.image %}
-                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                            {% else %}
-                            <img src="https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg" class="card-img-top" alt="{{ product.name }}">
-                            {% endif %}
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title product-title">{{ product.name }}</h5>
-                            <p class="card-text text-danger mb-1">
-                                <s>PKR: {{ product.original_price }}</s>
-                            </p>
-                            <p class="card-text text-danger fw-bold mb-2">
-                                Discounted Price: {{ product.price }}
-                            </p>
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-alfa btn-sm">View Details</a>
+                                <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+                                {% else %}
+                                <img src="{% static 'alfamall-logo.png' %}" class="product-image" alt="{{ product.name }}">
+                                {% endif %}
+                            </a>
+                            <div class="quick-actions">
+                                <button class="action-icon add-to-cart" data-product-id="{{ product.id }}">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="action-icon add-to-wishlist" data-product-id="{{ product.id }}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="action-icon quick-view" data-product-id="{{ product.id }}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">{{ product.name }}</h3>
+                            <div class="product-price">
+                                <span class="original-price">PKR {{ product.original_price }}</span>
+                                <span class="current-price">PKR {{ product.price }}</span>
+                            </div>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-view-details">View Details</a>
                         </div>
                     </div>
                 </div>
                 {% empty %}
                 <div class="swiper-slide">
-                    <div class="card h-100 product-card text-center p-5">
+                    <div class="empty-products">
                         <p>No featured products available at the moment.</p>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next featured-button-next"></div>
+            <div class="swiper-button-prev featured-button-prev"></div>
         </div>
     </div>
 </section>
 
-<!-- Categories Carousel -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5"><i class="bi bi-grid-3x3-gap-fill text-alfa me-2"></i>Shop by Category</h2>
-        <div class="swiper categories-swiper">
-            <div class="swiper-wrapper">
-                {% for category in categories %}
-                <div class="swiper-slide">
-                    <div class="card h-100 animate__animated animate__fadeInUp category-card position-relative overflow-hidden" style="transition:box-shadow 0.3s, transform 0.3s;">
-                        <div class="category-bg position-absolute top-0 start-0 w-100 h-100" style="z-index:0; opacity:0.08; background: radial-gradient(circle at 60% 40%, #e60000 0%, #fff 100%);"></div>
-                        <div class="card-body text-center position-relative" style="z-index:1;">
-                            <div class="mb-12 category-icon-wrapper">
-                                {% if category.name|lower == 'accessories' %}
-                                    <i class="bi bi-headphones category-icon" style="font-size:2.5rem;"></i>
-                                {% elif category.name|lower == 'electronics' %}
-                                    <i class="bi bi-cpu category-icon" style="font-size:2.5rem;"></i>
-                                {% elif category.name|lower == 'gaming & laptops' %}
-                                    <i class="bi bi-controller category-icon" style="font-size:2.5rem;"></i>
-                                {% elif category.name|lower == 'led tv' %}
-                                    <i class="bi bi-tv category-icon" style="font-size:2.5rem;"></i>
-                                {% elif category.name|lower == 'mobile phones & tablets' %}
-                                    <i class="bi bi-phone category-icon" style="font-size:2.5rem;"></i>
-                                {% elif category.name|lower == 'watches' %}
-                                    <i class="bi bi-watch category-icon" style="font-size:2.5rem;"></i>
-                                {% else %}
-                                    <i class="bi bi-box category-icon" style="font-size:2.5rem;"></i>
-                                {% endif %}
-                            </div>
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            <a href="{{ category.get_absolute_url }}" class="btn btn-alfa mt-2 category-btn">Browse</a>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="swiper-slide">
-                    <div class="card h-100 text-center p-5">
-                        <p>No categories available.</p>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </div>
-</section>
-
-<!-- Personalized Recommendations Carousel -->
+<!-- Recommended For You Carousel -->
 {% if user.is_authenticated %}
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0"><i class="bi bi-person-heart text-alfa me-2"></i>Recommended For You</h2>
-            <a href="{% url 'recommendations:user_recommendations' %}" class="btn btn-outline-danger animated-cta">
-                Explore Your Picks <i class="bi bi-arrow-right"></i>
-            </a>
-        </div>
-        <div id="personalizedRecommendationsCarousel" class="swiper personalized-swiper">
-            <div class="swiper-wrapper" id="personalizedRecommendations">
-                <div class="swiper-slide">
-                    <div class="card h-100 product-card text-center p-5">
-                        <div class="spinner-border text-danger" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </div>
-</section>
+{% include 'recommendations/recommended_products.html' with user_id=user.id %}
 {% endif %}
 
-<!-- Special Offer -->
-<section class="py-5 bg-alfa-secondary text-white">
-    <div class="container text-center">
-        <h2 class="mb-4 animate__animated animate__pulse animate__infinite">Special Offer</h2>
-        <p class="lead mb-4">Sign up today and get 20% off your first purchase!</p>
-        <a href="{% url 'users:register' %}" class="btn btn-light btn-lg animated-cta">Sign Up Now <i class="bi bi-gift"></i></a>
-    </div>
-</section>
+
 {% endblock %}
 
 {% block extra_css %}
 {{ block.super }}
 <style>
-/* .category-card {
+    /* Hero Carousel Styles */
+    .hero-section {
+        margin-top: -1.5rem;
+    }
+    
+    .hero-slide {
+        height: 500px;
+        overflow: hidden;
+    }
+    
+    .hero-bg-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+    }
+    
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+        max-width: 600px;
+        z-index: 2;
+        padding: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: #fff;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-shop-now {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 10px rgba(230, 0, 0, 0.3);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .btn-shop-now:hover {
+        background-color: var(--primary-color);
+        color: #fff;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(230, 0, 0, 0.4);
+    }
+    
+    .btn-shop-now:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 8px rgba(230, 0, 0, 0.3);
+    }
+    
+    .hero-pagination {
+        bottom: 20px !important;
+    }
+    
+    .swiper-pagination-bullet {
+        width: 12px;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 1;
+        transition: transform 150ms ease, background-color 150ms ease;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background: var(--primary-color);
+    }
+    
+    .swiper-pagination-bullet:hover {
+        transform: scale(1.3);
+    }
+    
+    /* Section Titles */
+    .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--primary-color);
+    }
+    
+    /* Categories Section */
+    .categories-section {
+        padding: 5rem 0;
+        background-color: var(--gray-light);
+    }
+    
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    @media (max-width: 991px) {
+        .categories-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .category-card {
+        position: relative;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-icon-wrapper {
+        margin-bottom: 1.5rem;
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        transition: transform 0.3s;
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.1) rotate(-8deg);
+    }
+    
+    .category-title {
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .category-link {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .category-link:hover {
+        color: var(--secondary-color);
+    }
+    
+    .category-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-color);
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 1;
+        pointer-events: none;
+    }
+    
+    .category-card:hover .category-overlay {
+        opacity: 0.05;
+    }
+    
+    /* Featured Products Carousel */
+    .featured-section {
+        padding: 5rem 0;
+    }
+    
+    .btn-view-all {
+        padding: 0.5rem 1.5rem;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        font-weight: 500;
+        transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    
+    .btn-view-all:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: #fff;
+        transform: translateX(5px);
+    }
+    
+    .product-card {
+        position: relative;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s, box-shadow 0.3s, border 0.4s;
+        height: 100%;
+        border: 2px solid transparent;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        border: 2px solid rgba(230, 0, 0, 0.2);
+    }
+    
+    .product-image-wrapper {
+        position: relative;
+        height: 250px;
+        padding: 1rem;
+        background-color: #f9f9f9;
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.5s;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+    
+    .quick-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.4s, transform 0.4s;
+    }
+    
+    .product-card:hover .quick-actions {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .action-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        border: none;
     cursor: pointer;
-    transition: box-shadow 0.3s, transform 0.3s;
-} */
-.categories-swiper .swiper-slide {
-  display: block;         /* overrides Swiper’s flex */
-  height: auto;           /* let the card inside dictate height */
-}
-
-/* 2) Force all category-cards to the same size, and use flex layout */
-.category-card {
-  /* you can tweak these dimensions as you like */
-  width: 70%;            /* slide width is handled by Swiper’s breakpoints */
-  height: 200px;          /* fix each card to the same height */
-  
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    
+    .action-icon:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: scale(1.15);
+    }
+    
+    .product-info {
+        padding: 1.5rem;
+    }
+    
+    .product-title {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+        height: 2.8rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .product-price {
   display: flex;
   flex-direction: column;
-}
-.category-card:hover {
-    box-shadow: 0 8px 32px rgba(230,0,0,0.13);
-    transform: translateY(-6px) scale(1.04);
-    z-index: 2;
-}
-.category-icon {
-    color: #e60000;
-    transition: color 0.3s, transform 0.3s;
-}
-.category-card:hover .category-icon {
-    color: #ff3333;
-    transform: scale(1.15) rotate(-8deg);
-    animation: pulse 0.7s;
-}
-.category-btn {
-    margin: initial;
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.category-card:hover .category-btn {
-    background: #fff;
-    color: #e60000;
-    box-shadow: 0 2px 8px rgba(230,0,0,0.12);
-    border: 1px solid #e60000;
-}
-.category-card .card-body {
-  flex: 1;                          /* fill available vertical space */
+        margin-bottom: 1rem;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #888;
+        font-size: 0.9rem;
+    }
+    
+    .current-price {
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+    
+    .btn-view-details {
+        width: 100%;
+        background-color: #f1f1f1;
+        color: var(--text-dark);
+        border: none;
+        padding: 0.75rem;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    
+    .btn-view-details:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: var(--primary-color);
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+    
+    /* Recommended Products Section */
+    .recommended-section {
+        padding: 5rem 0;
+        background-color: var(--gray-light);
+    }
+    
+    .loading-spinner {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;  /* logo+title up top, button down low */
+        align-items: center;
+        justify-content: center;
+        height: 350px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(230, 0, 0, 0.1);
+        border-left-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Special Offer Section */
+    .special-offer-section {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+        color: white;
+    }
+    
+    .special-offer-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+    
+    .special-offer-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
 }
 </style>
 {% endblock %}
@@ -238,112 +569,113 @@
 {% block extra_js %}
 {{ block.super }}
 <script>
-    // Hero Banner Swiper
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hero Carousel
     new Swiper('.hero-swiper', {
         loop: true,
-        autoplay: { delay: 5000, disableOnInteraction: false },
-        pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
-        navigation: { nextEl: '.hero-swiper .swiper-button-next', prevEl: '.hero-swiper .swiper-button-prev' },
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false
+            },
+            pagination: {
+                el: '.hero-pagination',
+                clickable: true
+            },
         effect: 'fade',
-        fadeEffect: { crossFade: true },
+            fadeEffect: {
+                crossFade: true
+            },
+            speed: 1000
     });
-    // Featured Products Swiper
+        
+        // Featured Products Carousel
     new Swiper('.featured-swiper', {
         slidesPerView: 1,
-        spaceBetween: 24,
-        loop: true,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.featured-button-next',
+                prevEl: '.featured-button-prev'
+            },
         breakpoints: {
-            576: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            992: { slidesPerView: 4 },
-        },
-        pagination: { el: '.featured-swiper .swiper-pagination', clickable: true },
-        navigation: { nextEl: '.featured-swiper .swiper-button-next', prevEl: '.featured-swiper .swiper-button-prev' },
-    });
-    // Categories Swiper
-    new Swiper('.categories-swiper', {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        loop: true,
-        breakpoints: {
-            576: { slidesPerView: 3 },
-            768: { slidesPerView: 4 },
-            992: { slidesPerView: 6 },
-        },
-        pagination: { el: '.categories-swiper .swiper-pagination', clickable: true },
-        navigation: { nextEl: '.categories-swiper .swiper-button-next', prevEl: '.categories-swiper .swiper-button-prev' },
-    });
-    // Personalized Recommendations Swiper (populated via AJAX)
-    let personalizedSwiper = new Swiper('.personalized-swiper', {
-        slidesPerView: 1,
-        spaceBetween: 24,
-        loop: true,
-        breakpoints: {
-            576: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            992: { slidesPerView: 4 },
-        },
-        pagination: { el: '.personalized-swiper .swiper-pagination', clickable: true },
-        navigation: { nextEl: '.personalized-swiper .swiper-button-next', prevEl: '.personalized-swiper .swiper-button-prev' },
-    });
-    // AJAX for Personalized Recommendations
-   
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('/recommendations/api/get-recommendations/?type=recommended')
+                576: {
+                    slidesPerView: 2
+                },
+                992: {
+                    slidesPerView: 3
+                },
+                1200: {
+                    slidesPerView: 4
+                }
+            },
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                draggable: true
+            },
+            grabCursor: true
+        });
+        
+        // Add to cart animation
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+                
+                // Show +1 animation
+                const buttonRect = this.getBoundingClientRect();
+                const plusOne = document.createElement('div');
+                plusOne.className = 'add-to-cart-anim';
+                plusOne.textContent = '+1';
+                plusOne.style.left = `${buttonRect.left + buttonRect.width/2}px`;
+                plusOne.style.top = `${buttonRect.top}px`;
+                document.body.appendChild(plusOne);
+                
+                setTimeout(() => {
+                    plusOne.remove();
+                }, 1000);
+                
+                // Add to cart AJAX call
+                fetch('/api/cart/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                })
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById('personalizedRecommendations');
-                if (data.products && data.products.length > 0) {
-                    let html = '';
-                    data.products.forEach(product => {
-                        html += `
-                            <div class="swiper-slide">
-                                <div class="card h-100 product-card animate__animated animate__fadeInUp">
-                                    <a href="${product.url}">
-                                        <img src="${product.image_url || 'https://alfa-cdn.comverseglobal.com/alfa/_next/static/media/nav-logo.bcb799eb.svg'}"
-                                            class="card-img-top" alt="${product.name}">
-                                    </a>
-                                    <div class="card-body">
-                                        <h5 class="card-title product-title">${product.name}</h5>
-                                        <p class="card-text text-danger fw-bold">PKR ${product.price}</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-2">
-                                            <a href="${product.url}" class="btn btn-sm btn-alfa">View Details</a>
-                                            <button class="btn btn-outline-danger btn-sm" title="Add to Wishlist"><i class="bi bi-heart"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    container.innerHTML = html;
-                    personalizedSwiper.update();
-                } else {
-                    container.innerHTML = `
-                        <div class="swiper-slide">
-                            <div class="card h-100 product-card text-center p-5">
-                                <div class="alert alert-info">
-                                    We're still learning your preferences! Browse more products to get personalized recommendations.
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    personalizedSwiper.update();
+                    // Update cart count in the header
+                    const cartBadge = document.querySelector('.cart-badge');
+                    if (cartBadge) {
+                        cartBadge.textContent = data.cart_count;
                 }
             })
             .catch(error => {
-                const container = document.getElementById('personalizedRecommendations');
-                container.innerHTML = `
-                    <div class="swiper-slide">
-                        <div class="card h-100 product-card text-center p-5">
-                            <div class="alert alert-danger">
-                                Error loading recommendations. Please try again.
-                            </div>
-                        </div>
-                    </div>
-                `;
-                personalizedSwiper.update();
+                    console.error('Error adding to cart:', error);
+                });
             });
     });
     
+        // Helper function to get cookie by name (for CSRF token)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+
+    });
 </script>
 {% endblock %}
